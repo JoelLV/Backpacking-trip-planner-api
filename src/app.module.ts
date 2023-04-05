@@ -9,7 +9,7 @@ import { TransportationsModule } from './transportations/transportations.module'
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { EquipmentItemModule } from './equipment-item/equipment-item.module';
 import { EquipmentSetsModule } from './equipment-sets/equipment-sets.module';
-import { EquipmentItemsModule } from './equipment-items/equipment-items.module';
+import { EquipmentPackageModule } from './equipment-package/equipment-package.module';
 
 @Module({
     imports: [
@@ -21,7 +21,7 @@ import { EquipmentItemsModule } from './equipment-items/equipment-items.module';
         TransportationsModule,
         EquipmentItemModule,
         EquipmentSetsModule,
-        EquipmentItemsModule,
+        EquipmentPackageModule,
     ],
     controllers: [AppController],
     providers: [AppService],
