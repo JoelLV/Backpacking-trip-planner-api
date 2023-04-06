@@ -12,7 +12,7 @@ export class EquipmentItem {
     @PrimaryKey({
         autoincrement: true,
     })
-    id!: number;
+    readonly id!: number;
 
     @ManyToOne({ entity: () => GearItem, fieldName: 'gear_item_id' })
     gear_item!: GearItem;

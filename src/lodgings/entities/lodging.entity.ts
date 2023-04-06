@@ -11,7 +11,7 @@ export class Lodging {
     @PrimaryKey({
         autoincrement: true,
     })
-    id!: number;
+    readonly id!: number;
 
     @Property({
         type: 'double(8,2)',

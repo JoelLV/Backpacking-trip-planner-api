@@ -12,7 +12,7 @@ export class EquipmentSet {
     @PrimaryKey({
         autoincrement: true,
     })
-    id!: number;
+    readonly id!: number;
 
     @Property({
         length: 64,

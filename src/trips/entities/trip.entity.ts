@@ -9,7 +9,7 @@ export class Trip {
     @PrimaryKey({
         autoincrement: true,
     })
-    id!: number;
+    readonly id!: number;
 
     @ManyToOne({ entity: () => EquipmentSet, fieldName: 'equipment_set_id' })
     equipment_set!: EquipmentSet;
