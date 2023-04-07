@@ -7,7 +7,8 @@ import {
 } from '@mikro-orm/core';
 import { randomBytes } from 'crypto';
 import { Trip } from 'src/trips/entities/trip.entity';
-import { uuid } from 'uuidv4';
+import { v4 as uuid } from "uuid"
+import { CreateUserDto } from '../dto/create-user.dto';
 @Entity()
 export class User {
     @PrimaryKey({
@@ -18,7 +19,7 @@ export class User {
     @Property({
         length: 64,
     })
-    readonly apiKey: string = randomBytes(64).toString();
+    readonly apiKey: string = randomBytes(32).toString('hex');
 
     @Property({
         length: 64,
@@ -27,4 +28,8 @@ export class User {
 
     @OneToMany({ entity: () => Trip, mappedBy: (trip) => trip.user })
     trips: Collection<Trip> = new Collection<Trip>(this);
+
+    constructor(createUserDto: CreateUserDto) {
+        this.name = createUserDto.name
+    }
 }
