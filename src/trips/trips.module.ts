@@ -9,6 +9,13 @@ import { EquipmentSetsService } from 'src/equipment-sets/equipment-sets.service'
 
 @Module({
     controllers: [TripsController],
-    providers: [TripsService, LodgingsService, TransportationsService, UsersService, TrailsService, EquipmentSetsService],
+    providers: [
+        TripsService,
+        LodgingsService,
+        TransportationsService,
+        UsersService,
+        TrailsService,
+        EquipmentSetsService,
+    ],
 })
 export class TripsModule {}

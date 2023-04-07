@@ -38,9 +38,9 @@ export class Transportation {
     trips: Collection<Trip> = new Collection<Trip>(this);
 
     constructor(createDto: CreateTransportationDto) {
-        this.cost = createDto.cost
-        this.name = createDto.name
-        this.address = createDto.address
-        this.description = createDto.description
+        this.cost = createDto.cost;
+        this.name = createDto.name;
+        this.address = createDto.address;
+        this.description = createDto.description;
     }
 }

@@ -6,6 +6,7 @@ import {
     Collection,
 } from '@mikro-orm/core';
 import { Trip } from 'src/trips/entities/trip.entity';
+import { CreateLodgingDto } from '../dto/create-lodging.dto';
 @Entity()
 export class Lodging {
     @PrimaryKey({
@@ -48,4 +49,14 @@ export class Lodging {
 
     @OneToMany({ entity: () => Trip, mappedBy: (trip) => trip.lodging })
     trips: Collection<Trip> = new Collection<Trip>(this);
+
+    constructor(createLodgingDto: CreateLodgingDto) {
+        this.cost = createLodgingDto.cost;
+        this.name = createLodgingDto.name;
+        this.description = createLodgingDto.description;
+        this.address = createLodgingDto.address;
+        this.phone = createLodgingDto.phone;
+        this.email = createLodgingDto.email;
+        this.rating = createLodgingDto.rating;
+    }
 }

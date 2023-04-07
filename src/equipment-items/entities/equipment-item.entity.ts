@@ -1,9 +1,4 @@
-import {
-    Entity,
-    ManyToOne,
-    PrimaryKey,
-    Property,
-} from '@mikro-orm/core';
+import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 import { EquipmentSet } from 'src/equipment-sets/entities/equipment-set.entity';
 import { GearItem } from 'src/gear-items/entities/gear-item.entity';
 

@@ -7,7 +7,7 @@ import {
 } from '@mikro-orm/core';
 import { randomBytes } from 'crypto';
 import { Trip } from 'src/trips/entities/trip.entity';
-import { v4 as uuid } from "uuid"
+import { v4 as uuid } from 'uuid';
 import { CreateUserDto } from '../dto/create-user.dto';
 @Entity()
 export class User {
@@ -30,6 +30,6 @@ export class User {
     trips: Collection<Trip> = new Collection<Trip>(this);
 
     constructor(createUserDto: CreateUserDto) {
-        this.name = createUserDto.name
+        this.name = createUserDto.name;
     }
 }

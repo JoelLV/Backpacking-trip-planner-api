@@ -6,6 +6,7 @@ import {
     Collection,
 } from '@mikro-orm/core';
 import { EquipmentItem } from 'src/equipment-items/entities/equipment-item.entity';
+import { CreateGearItemDto } from '../dto/create-gear-item.dto';
 
 @Entity()
 export class GearItem {
@@ -29,4 +30,9 @@ export class GearItem {
     equipment_items: Collection<EquipmentItem> = new Collection<EquipmentItem>(
         this,
     );
+
+    constructor(createGearItemDto: CreateGearItemDto) {
+        this.name = createGearItemDto.name
+        this.is_consumable = createGearItemDto.is_consumable
+    }
 }
