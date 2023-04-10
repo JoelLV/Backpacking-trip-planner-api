@@ -1,6 +1,7 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateTripDto } from './create-trip.dto';
-import { IsInt } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsDate, IsInt, IsString } from 'class-validator';
 
 export class UpdateTripDto extends PartialType(CreateTripDto) {
     @IsInt()
@@ -9,12 +10,16 @@ export class UpdateTripDto extends PartialType(CreateTripDto) {
     @IsInt()
     trail_id?: number;
 
-    @IsInt()
-    user_id?: number;
+    @IsString()
+    user_id?: string;
 
     @IsInt()
     lodging_id?: number;
 
     @IsInt()
     transportation_id?: number;
+
+    @IsDate()
+    @Type(() => Date)
+    planned_date?: Date;
 }

@@ -32,7 +32,7 @@ export class GearItem {
     );
 
     constructor(createGearItemDto: CreateGearItemDto) {
-        this.name = createGearItemDto.name
-        this.is_consumable = createGearItemDto.is_consumable
+        this.name = createGearItemDto.name;
+        this.is_consumable = createGearItemDto.is_consumable;
     }
 }

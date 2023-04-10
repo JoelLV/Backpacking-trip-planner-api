@@ -61,8 +61,11 @@ export class EquipmentSetsController {
      * @returns the modified entity.
      */
     @Put(':id')
-    fullUpdate(@Param('id') id: string, @Body() createEquipmentSetDto: CreateEquipmentSetDto) {
-        return this.equipmentSetsService.update(+id, createEquipmentSetDto)
+    fullUpdate(
+        @Param('id') id: string,
+        @Body() createEquipmentSetDto: CreateEquipmentSetDto,
+    ) {
+        return this.equipmentSetsService.update(+id, createEquipmentSetDto);
     }
 
     /**
@@ -78,8 +81,13 @@ export class EquipmentSetsController {
         @Param('id') id: string,
         @Body() updateEquipmentSetDto: UpdateEquipmentSetDto,
     ) {
-        if (updateEquipmentSetDto.description === undefined && updateEquipmentSetDto.name === undefined) {
-            throw new BadRequestException('Must provide at least one property.')
+        if (
+            updateEquipmentSetDto.description === undefined &&
+            updateEquipmentSetDto.name === undefined
+        ) {
+            throw new BadRequestException(
+                'Must provide at least one property.',
+            );
         }
         return this.equipmentSetsService.update(+id, updateEquipmentSetDto);
     }

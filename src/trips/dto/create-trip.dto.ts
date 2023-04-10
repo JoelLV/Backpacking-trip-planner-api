@@ -1,4 +1,5 @@
-import { IsInt, IsNotEmpty } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsDate, IsInt, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateTripDto {
     @IsInt()
@@ -9,9 +10,9 @@ export class CreateTripDto {
     @IsNotEmpty()
     trail_id!: number;
 
-    @IsInt()
+    @IsString()
     @IsNotEmpty()
-    user_id!: number;
+    user_id!: string;
 
     @IsInt()
     @IsNotEmpty()
@@ -20,4 +21,9 @@ export class CreateTripDto {
     @IsInt()
     @IsNotEmpty()
     transportation_id!: number;
+
+    @IsDate()
+    @Type(() => Date)
+    @IsNotEmpty()
+    planned_date!: Date;
 }

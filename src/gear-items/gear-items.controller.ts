@@ -12,7 +12,7 @@ import {
 import { GearItemsService } from './gear-items.service';
 import { CreateGearItemDto } from './dto/create-gear-item.dto';
 import { UpdateGearItemDto } from './dto/update-gear-item.dto';
-import { Loaded } from "@mikro-orm/core"
+import { Loaded } from '@mikro-orm/core';
 import { GearItem } from './entities/gear-item.entity';
 
 @Controller('gear-items')
@@ -27,7 +27,9 @@ export class GearItemsController {
      * @returns a gear item entity object.
      */
     @Post()
-    create(@Body() createGearItemDto: CreateGearItemDto): Promise<Loaded<GearItem>> {
+    create(
+        @Body() createGearItemDto: CreateGearItemDto,
+    ): Promise<Loaded<GearItem>> {
         return this.gearItemsService.create(createGearItemDto);
     }
 
@@ -83,8 +85,13 @@ export class GearItemsController {
         @Param('id') id: string,
         @Body() updateGearItemDto: UpdateGearItemDto,
     ): Promise<Loaded<GearItem>> {
-        if (updateGearItemDto.is_consumable === undefined && updateGearItemDto.name === undefined) {
-            throw new BadRequestException('Must provide at least one property.')
+        if (
+            updateGearItemDto.is_consumable === undefined &&
+            updateGearItemDto.name === undefined
+        ) {
+            throw new BadRequestException(
+                'Must provide at least one property.',
+            );
         }
         return this.gearItemsService.update(+id, updateGearItemDto);
     }

@@ -3,7 +3,7 @@ import { CreateEquipmentSetDto } from './dto/create-equipment-set.dto';
 import { UpdateEquipmentSetDto } from './dto/update-equipment-set.dto';
 import { EntityManager } from '@mikro-orm/mysql';
 import { EquipmentSet } from './entities/equipment-set.entity';
-import { Loaded } from "@mikro-orm/core"
+import { Loaded } from '@mikro-orm/core';
 
 @Injectable()
 export class EquipmentSetsService {
@@ -16,8 +16,12 @@ export class EquipmentSetsService {
      * @param createEquipmentSetDto dto used to fetch data needed for entity.
      * @returns the newly created entity.
      */
-    async create(createEquipmentSetDto: CreateEquipmentSetDto): Promise<EquipmentSet> {
-        const equipmentSet: EquipmentSet = new EquipmentSet(createEquipmentSetDto);
+    async create(
+        createEquipmentSetDto: CreateEquipmentSetDto,
+    ): Promise<EquipmentSet> {
+        const equipmentSet: EquipmentSet = new EquipmentSet(
+            createEquipmentSetDto,
+        );
         await this.em.persistAndFlush(equipmentSet);
 
         return equipmentSet;
@@ -42,9 +46,12 @@ export class EquipmentSetsService {
      * @returns the entity found.
      */
     async findOne(id: number): Promise<Loaded<EquipmentSet>> {
-        const equipmentSet: Loaded<EquipmentSet> | null = await this.em.findOne(EquipmentSet, {
-            id,
-        });
+        const equipmentSet: Loaded<EquipmentSet> | null = await this.em.findOne(
+            EquipmentSet,
+            {
+                id,
+            },
+        );
 
         if (!equipmentSet) {
             throw new NotFoundException();
@@ -60,10 +67,14 @@ export class EquipmentSetsService {
      * @param updateEquipmentSetDto dto used to update equipment set entity.
      * @returns the updated equipment set entity.
      */
-    async update(id: number, updateEquipmentSetDto: UpdateEquipmentSetDto | CreateEquipmentSetDto): Promise<Loaded<EquipmentSet>> {
+    async update(
+        id: number,
+        updateEquipmentSetDto: UpdateEquipmentSetDto | CreateEquipmentSetDto,
+    ): Promise<Loaded<EquipmentSet>> {
         const equipmentSet: Loaded<EquipmentSet> = await this.findOne(id);
-        equipmentSet.description = updateEquipmentSetDto.description ?? equipmentSet.description
-        equipmentSet.name = updateEquipmentSetDto.name ?? equipmentSet.name
+        equipmentSet.description =
+            updateEquipmentSetDto.description ?? equipmentSet.description;
+        equipmentSet.name = updateEquipmentSetDto.name ?? equipmentSet.name;
 
         await this.em.persistAndFlush(equipmentSet);
         return equipmentSet;

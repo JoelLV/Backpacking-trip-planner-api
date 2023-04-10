@@ -22,7 +22,7 @@ export class TrailsController {
      * in the database.
      *
      * @param createTrailDto dto used to fetch data for entity.
-     * @returns a user entity object.
+     * @returns a trail entity object.
      */
     @Post()
     create(@Body() createTrailDto: CreateTrailDto) {

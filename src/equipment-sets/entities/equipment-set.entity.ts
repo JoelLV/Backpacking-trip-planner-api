@@ -37,7 +37,7 @@ export class EquipmentSet {
     trips: Collection<Trip> = new Collection<Trip>(this);
 
     constructor(createEquipSetDto: CreateEquipmentSetDto) {
-        this.name = createEquipSetDto.name
-        this.description = createEquipSetDto.description
+        this.name = createEquipSetDto.name;
+        this.description = createEquipSetDto.description;
     }
 }

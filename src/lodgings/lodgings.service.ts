@@ -3,7 +3,7 @@ import { CreateLodgingDto } from './dto/create-lodging.dto';
 import { UpdateLodgingDto } from './dto/update-lodging.dto';
 import { EntityManager } from '@mikro-orm/mysql';
 import { Lodging } from './entities/lodging.entity';
-import { Loaded } from "@mikro-orm/core"
+import { Loaded } from '@mikro-orm/core';
 import { NotFoundException } from '@nestjs/common';
 
 @Injectable()
@@ -61,15 +61,18 @@ export class LodgingsService {
      * @param lodgingDto dto used to update lodging entity.
      * @returns the updated lodging entity.
      */
-    async update(id: number, lodgingDto: UpdateLodgingDto | CreateLodgingDto): Promise<Loaded<Lodging>> {
+    async update(
+        id: number,
+        lodgingDto: UpdateLodgingDto | CreateLodgingDto,
+    ): Promise<Loaded<Lodging>> {
         const lodging: Loaded<Lodging> = await this.findOne(id);
         lodging.description = lodgingDto.description ?? lodging.description;
         lodging.name = lodgingDto.name ?? lodging.name;
-        lodging.address = lodgingDto.address ?? lodging.address
-        lodging.cost = lodgingDto.cost ?? lodging.cost
-        lodging.email = lodgingDto.email ?? lodging.email
-        lodging.phone = lodgingDto.phone ?? lodging.phone
-        lodging.rating = lodgingDto.rating ?? lodging.rating
+        lodging.address = lodgingDto.address ?? lodging.address;
+        lodging.cost = lodgingDto.cost ?? lodging.cost;
+        lodging.email = lodgingDto.email ?? lodging.email;
+        lodging.phone = lodgingDto.phone ?? lodging.phone;
+        lodging.rating = lodgingDto.rating ?? lodging.rating;
 
         await this.em.persistAndFlush(lodging);
         return lodging;

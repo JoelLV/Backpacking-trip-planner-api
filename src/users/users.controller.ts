@@ -32,6 +32,19 @@ export class UsersController {
     }
 
     /**
+     * Creates a new user without the need
+     * of api key authentication. ONLY USED
+     * FOR TESTING.
+     * 
+     * @param createUserDto dto used to create user.
+     * @returns the user entity created.
+     */
+    @Post('/admin')
+    createAdmin(@Body() createUserDto: CreateUserDto): Promise<Loaded<User>> {
+        return this.usersService.create(createUserDto)
+    }
+
+    /**
      * Finds all user entities stored in the database
      * and returns them as JSON.
      *

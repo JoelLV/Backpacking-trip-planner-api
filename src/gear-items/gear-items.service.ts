@@ -3,7 +3,7 @@ import { CreateGearItemDto } from './dto/create-gear-item.dto';
 import { UpdateGearItemDto } from './dto/update-gear-item.dto';
 import { EntityManager } from '@mikro-orm/mysql';
 import { GearItem } from './entities/gear-item.entity';
-import { Loaded } from "@mikro-orm/core"
+import { Loaded } from '@mikro-orm/core';
 
 @Injectable()
 export class GearItemsService {
@@ -42,9 +42,12 @@ export class GearItemsService {
      * @returns the entity found.
      */
     async findOne(id: number): Promise<Loaded<GearItem>> {
-        const gearItem: Loaded<GearItem> | null = await this.em.findOne(GearItem, {
-            id,
-        });
+        const gearItem: Loaded<GearItem> | null = await this.em.findOne(
+            GearItem,
+            {
+                id,
+            },
+        );
 
         if (!gearItem) {
             throw new NotFoundException();
@@ -60,10 +63,14 @@ export class GearItemsService {
      * @param gearItemDto dto used to update gear item entity.
      * @returns the updated gear item entity.
      */
-    async update(id: number, gearItemDto: UpdateGearItemDto | CreateGearItemDto): Promise<Loaded<GearItem>> {
+    async update(
+        id: number,
+        gearItemDto: UpdateGearItemDto | CreateGearItemDto,
+    ): Promise<Loaded<GearItem>> {
         const gearItem: Loaded<GearItem> = await this.findOne(id);
-        gearItem.name = gearItemDto.name ?? gearItem.name
-        gearItem.is_consumable = gearItemDto.is_consumable ?? gearItem.is_consumable
+        gearItem.name = gearItemDto.name ?? gearItem.name;
+        gearItem.is_consumable =
+            gearItemDto.is_consumable ?? gearItem.is_consumable;
 
         await this.em.persistAndFlush(gearItem);
         return gearItem;

@@ -13,7 +13,7 @@ import { LodgingsService } from './lodgings.service';
 import { CreateLodgingDto } from './dto/create-lodging.dto';
 import { UpdateLodgingDto } from './dto/update-lodging.dto';
 import { Lodging } from './entities/lodging.entity';
-import { Loaded } from "@mikro-orm/core"
+import { Loaded } from '@mikro-orm/core';
 
 @Controller('lodgings')
 export class LodgingsController {
