@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { TripsModule } from './trips/trips.module';
 import { LodgingsModule } from './lodgings/lodgings.module';
@@ -8,6 +8,8 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { EquipmentSetsModule } from './equipment-sets/equipment-sets.module';
 import { GearItemsModule } from './gear-items/gear-items.module';
 import { EquipmentItemsModule } from './equipment-items/equipment-items.module';
+import { AuthMiddleware } from './middleware/authentication.middleware';
+import { OrmContextInitMiddleware } from './middleware/orm-context-init.middleware';
 
 @Module({
     imports: [
@@ -24,4 +26,11 @@ import { EquipmentItemsModule } from './equipment-items/equipment-items.module';
     controllers: [],
     providers: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+    configure(consumer: MiddlewareConsumer) {
+        consumer
+            .apply(OrmContextInitMiddleware, AuthMiddleware)
+            .exclude({ path: '/users/admin', method: RequestMethod.POST })
+            .forRoutes({ path: '/*', method: RequestMethod.ALL })
+    }
+}
