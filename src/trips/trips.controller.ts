@@ -13,6 +13,15 @@ import { TripsService } from './trips.service';
 import { CreateTripDto } from './dto/create-trip.dto';
 import { UpdateTripDto } from './dto/update-trip.dto';
 
+interface TripReturn {
+    id: number,
+    equipment_set_id: number,
+    trail_id: number,
+    user_id: string,
+    lodging_id: number,
+    transportation_id: number,
+    planned_date: Date
+}
 @Controller('trips')
 export class TripsController {
     constructor(private readonly tripsService: TripsService) {}
@@ -25,8 +34,17 @@ export class TripsController {
      * @returns a trip entity entity object.
      */
     @Post()
-    create(@Body() createTripDto: CreateTripDto) {
-        return this.tripsService.create(createTripDto);
+    async create(@Body() createTripDto: CreateTripDto): Promise<TripReturn> {
+        const entity = await this.tripsService.create(createTripDto);
+        return {
+            id: entity.id,
+            equipment_set_id: entity.equipment_set.id,
+            trail_id: entity.trail.id,
+            user_id: entity.user.id,
+            lodging_id: entity.lodging.id,
+            transportation_id: entity.transporation.id,
+            planned_date: entity.planned_date
+        }
     }
 
     /**
@@ -36,8 +54,19 @@ export class TripsController {
      * @returns an array of trip entities.
      */
     @Get()
-    findAll() {
-        return this.tripsService.findAll();
+    async findAll(): Promise<TripReturn[]> {
+        const entities = await this.tripsService.findAll();
+        return entities.map(entity => {
+            return {
+                id: entity.id,
+                equipment_set_id: entity.equipment_set.id,
+                trail_id: entity.trail.id,
+                user_id: entity.user.id,
+                lodging_id: entity.lodging.id,
+                transportation_id: entity.transporation.id,
+                planned_date: entity.planned_date
+            }
+        })
     }
 
     /**
@@ -48,8 +77,17 @@ export class TripsController {
      * @returns the entity found.
      */
     @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.tripsService.findOne(+id);
+    async findOne(@Param('id') id: string): Promise<TripReturn> {
+        const entity = await this.tripsService.findOne(+id);
+        return {
+            id: entity.id,
+            equipment_set_id: entity.equipment_set.id,
+            trail_id: entity.trail.id,
+            user_id: entity.user.id,
+            lodging_id: entity.lodging.id,
+            transportation_id: entity.transporation.id,
+            planned_date: entity.planned_date
+        }
     }
 
     /**
@@ -61,8 +99,17 @@ export class TripsController {
      * @returns the modified entity.
      */
     @Put(':id')
-    fullUpdate(@Param('id') id: string, @Body() createTripDto: CreateTripDto) {
-        return this.tripsService.update(+id, createTripDto);
+    async fullUpdate(@Param('id') id: string, @Body() createTripDto: CreateTripDto): Promise<TripReturn> {
+        const entity = await this.tripsService.update(+id, createTripDto);
+        return {
+            id: entity.id,
+            equipment_set_id: entity.equipment_set.id,
+            trail_id: entity.trail.id,
+            user_id: entity.user.id,
+            lodging_id: entity.lodging.id,
+            transportation_id: entity.transporation.id,
+            planned_date: entity.planned_date
+        }
     }
 
     /**
@@ -74,7 +121,7 @@ export class TripsController {
      * @returns the modified entity.
      */
     @Patch(':id')
-    update(@Param('id') id: string, @Body() updateTripDto: UpdateTripDto) {
+    async update(@Param('id') id: string, @Body() updateTripDto: UpdateTripDto): Promise<TripReturn> {
         if (
             updateTripDto.equipment_set_id === undefined &&
             updateTripDto.lodging_id === undefined &&
@@ -82,12 +129,21 @@ export class TripsController {
             updateTripDto.transportation_id === undefined &&
             updateTripDto.user_id === undefined
         ) {
-            return new BadRequestException(
+            throw new BadRequestException(
                 'Must specify at least one property.',
             );
         }
 
-        return this.tripsService.update(+id, updateTripDto);
+        const entity = await this.tripsService.update(+id, updateTripDto);
+        return {
+            id: entity.id,
+            equipment_set_id: entity.equipment_set.id,
+            trail_id: entity.trail.id,
+            user_id: entity.user.id,
+            lodging_id: entity.lodging.id,
+            transportation_id: entity.transporation.id,
+            planned_date: entity.planned_date
+        }
     }
 
     /**
@@ -98,7 +154,16 @@ export class TripsController {
      * @returns the deleted entity.
      */
     @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.tripsService.remove(+id);
+    async remove(@Param('id') id: string): Promise<TripReturn> {
+        const entity = await this.tripsService.remove(+id);
+        return {
+            id: entity.id,
+            equipment_set_id: entity.equipment_set.id,
+            trail_id: entity.trail.id,
+            user_id: entity.user.id,
+            lodging_id: entity.lodging.id,
+            transportation_id: entity.transporation.id,
+            planned_date: entity.planned_date
+        }
     }
 }

@@ -12,14 +12,18 @@ import {
 import { EquipmentItemsService } from './equipment-items.service';
 import { CreateEquipmentItemDto } from './dto/create-equipment-item.dto';
 import { UpdateEquipmentItemDto } from './dto/update-equipment-item.dto';
-import { Loaded } from '@mikro-orm/core';
-import { EquipmentItem } from './entities/equipment-item.entity';
 
+interface EquipmentItemReturn {
+    id: number,
+    gear_item_id: number,
+    equipment_set_id: number,
+    quantity: number
+}
 @Controller('equipment-items')
 export class EquipmentItemsController {
     constructor(
         private readonly equipmentItemsService: EquipmentItemsService,
-    ) {}
+    ) { }
 
     /**
      * Creates a new equipment item entity and stores it
@@ -29,10 +33,16 @@ export class EquipmentItemsController {
      * @returns a equipment entity entity object.
      */
     @Post()
-    create(
+    async create(
         @Body() createEquipmentItemDto: CreateEquipmentItemDto,
-    ): Promise<EquipmentItem> {
-        return this.equipmentItemsService.create(createEquipmentItemDto);
+    ): Promise<EquipmentItemReturn> {
+        const entity = await this.equipmentItemsService.create(createEquipmentItemDto);
+        return {
+            id: entity.id,
+            gear_item_id: entity.gear_item.id,
+            equipment_set_id: entity.equipment_set.id,
+            quantity: entity.quantity
+        }
     }
 
     /**
@@ -42,8 +52,16 @@ export class EquipmentItemsController {
      * @returns an array of equipment item entities.
      */
     @Get()
-    findAll(): Promise<Loaded<EquipmentItem>[]> {
-        return this.equipmentItemsService.findAll();
+    async findAll(): Promise<EquipmentItemReturn[]> {
+        const entities = await this.equipmentItemsService.findAll();
+        return entities.map(entity => {
+            return {
+                id: entity.id,
+                gear_item_id: entity.gear_item.id,
+                equipment_set_id: entity.equipment_set.id,
+                quantity: entity.quantity
+            }
+        })
     }
 
     /**
@@ -54,8 +72,14 @@ export class EquipmentItemsController {
      * @returns the entity found.
      */
     @Get(':id')
-    findOne(@Param('id') id: string): Promise<Loaded<EquipmentItem>> {
-        return this.equipmentItemsService.findOne(+id);
+    async findOne(@Param('id') id: string): Promise<EquipmentItemReturn> {
+        const entity = await this.equipmentItemsService.findOne(+id);
+        return {
+            id: entity.id,
+            gear_item_id: entity.gear_item.id,
+            equipment_set_id: entity.equipment_set.id,
+            quantity: entity.quantity
+        }
     }
 
     /**
@@ -67,11 +91,17 @@ export class EquipmentItemsController {
      * @returns the modified entity.
      */
     @Put(':id')
-    fullUpdate(
+    async fullUpdate(
         @Param('id') id: string,
         @Body() createEquipmentItemDto: CreateEquipmentItemDto,
-    ): Promise<Loaded<EquipmentItem>> {
-        return this.equipmentItemsService.update(+id, createEquipmentItemDto);
+    ): Promise<EquipmentItemReturn> {
+        const entity = await this.equipmentItemsService.update(+id, createEquipmentItemDto);
+        return {
+            id: entity.id,
+            gear_item_id: entity.gear_item.id,
+            equipment_set_id: entity.equipment_set.id,
+            quantity: entity.quantity
+        }
     }
 
     /**
@@ -83,10 +113,10 @@ export class EquipmentItemsController {
      * @returns the modified entity.
      */
     @Patch(':id')
-    update(
+    async update(
         @Param('id') id: string,
         @Body() updateEquipmentItemDto: UpdateEquipmentItemDto,
-    ): Promise<Loaded<EquipmentItem>> {
+    ): Promise<EquipmentItemReturn> {
         if (
             updateEquipmentItemDto.equipment_set_id === undefined &&
             updateEquipmentItemDto.gear_item_id === undefined &&
@@ -97,7 +127,13 @@ export class EquipmentItemsController {
             );
         }
 
-        return this.equipmentItemsService.update(+id, updateEquipmentItemDto);
+        const entity = await this.equipmentItemsService.update(+id, updateEquipmentItemDto);
+        return {
+            id: entity.id,
+            equipment_set_id: entity.equipment_set.id,
+            gear_item_id: entity.gear_item.id,
+            quantity: entity.quantity
+        }
     }
 
     /**
@@ -108,7 +144,13 @@ export class EquipmentItemsController {
      * @returns the deleted entity.
      */
     @Delete(':id')
-    remove(@Param('id') id: string): Promise<Loaded<EquipmentItem>> {
-        return this.equipmentItemsService.remove(+id);
+    async remove(@Param('id') id: string): Promise<EquipmentItemReturn> {
+        const entity = await this.equipmentItemsService.remove(+id);
+        return {
+            id: entity.id,
+            gear_item_id: entity.gear_item.id,
+            equipment_set_id: entity.equipment_set.id,
+            quantity: entity.quantity
+        }
     }
 }

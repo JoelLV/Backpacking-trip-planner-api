@@ -11,7 +11,6 @@ import { Trail } from 'src/trails/entities/trail.entity';
 import { Transportation } from 'src/transportations/entities/transportation.entity';
 import { User } from 'src/users/entities/user.entity';
 @Entity()
-@Unique({ properties: ['equipment_set', 'trail', 'user', 'lodging'] })
 export class Trip {
     @PrimaryKey({
         autoincrement: true,

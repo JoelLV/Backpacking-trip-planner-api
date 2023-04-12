@@ -15,6 +15,11 @@ import { UpdateGearItemDto } from './dto/update-gear-item.dto';
 import { Loaded } from '@mikro-orm/core';
 import { GearItem } from './entities/gear-item.entity';
 
+interface GearItemReturn {
+    id: number,
+    name: string,
+    is_consumable: boolean
+}
 @Controller('gear-items')
 export class GearItemsController {
     constructor(private readonly gearItemsService: GearItemsService) {}
@@ -27,10 +32,15 @@ export class GearItemsController {
      * @returns a gear item entity object.
      */
     @Post()
-    create(
+    async create(
         @Body() createGearItemDto: CreateGearItemDto,
-    ): Promise<Loaded<GearItem>> {
-        return this.gearItemsService.create(createGearItemDto);
+    ): Promise<GearItemReturn> {
+        const entity = await this.gearItemsService.create(createGearItemDto);
+        return {
+            id: entity.id,
+            name: entity.name,
+            is_consumable: entity.is_consumable
+        }
     }
 
     /**
@@ -40,7 +50,7 @@ export class GearItemsController {
      * @returns an array of gear item entities.
      */
     @Get()
-    findAll(): Promise<Loaded<GearItem>[]> {
+    async findAll(): Promise<GearItemReturn[]> {
         return this.gearItemsService.findAll();
     }
 
@@ -52,7 +62,7 @@ export class GearItemsController {
      * @returns the entity found.
      */
     @Get(':id')
-    findOne(@Param('id') id: string): Promise<Loaded<GearItem>> {
+    findOne(@Param('id') id: string): Promise<GearItemReturn> {
         return this.gearItemsService.findOne(+id);
     }
 
@@ -68,7 +78,7 @@ export class GearItemsController {
     fullUpdate(
         @Param('id') id: string,
         @Body() createGearItemDto: CreateGearItemDto,
-    ): Promise<Loaded<GearItem>> {
+    ): Promise<GearItemReturn> {
         return this.gearItemsService.update(+id, createGearItemDto);
     }
 
@@ -84,7 +94,7 @@ export class GearItemsController {
     update(
         @Param('id') id: string,
         @Body() updateGearItemDto: UpdateGearItemDto,
-    ): Promise<Loaded<GearItem>> {
+    ): Promise<GearItemReturn> {
         if (
             updateGearItemDto.is_consumable === undefined &&
             updateGearItemDto.name === undefined
@@ -104,7 +114,7 @@ export class GearItemsController {
      * @returns the deleted entity.
      */
     @Delete(':id')
-    remove(@Param('id') id: string): Promise<Loaded<GearItem>> {
+    remove(@Param('id') id: string):Promise<GearItemReturn> {
         return this.gearItemsService.remove(+id);
     }
 }

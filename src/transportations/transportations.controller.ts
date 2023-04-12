@@ -15,6 +15,13 @@ import { UpdateTransportationDto } from './dto/update-transportation.dto';
 import { Transportation } from './entities/transportation.entity';
 import { Loaded } from '@mikro-orm/core';
 
+interface TransportationReturn {
+    id: number,
+    cost: number,
+    name: string,
+    address: string,
+    description: string
+}
 @Controller('transportations')
 export class TransportationsController {
     constructor(
@@ -29,10 +36,17 @@ export class TransportationsController {
      * @returns the entity created.
      */
     @Post()
-    create(
+    async create(
         @Body() createTransportationDto: CreateTransportationDto,
-    ): Promise<Transportation> {
-        return this.transportationsService.create(createTransportationDto);
+    ): Promise<TransportationReturn> {
+        const entity = await this.transportationsService.create(createTransportationDto);
+        return {
+            id: entity.id,
+            cost: entity.cost,
+            name: entity.name,
+            address: entity.address,
+            description: entity.description
+        }
     }
 
     /**
@@ -42,7 +56,7 @@ export class TransportationsController {
      * @returns an array of transportation entities.
      */
     @Get()
-    findAll(): Promise<Loaded<Transportation>[]> {
+    findAll(): Promise<TransportationReturn[]> {
         return this.transportationsService.findAll();
     }
 
@@ -54,7 +68,7 @@ export class TransportationsController {
      * @returns the entity found.
      */
     @Get(':id')
-    findOne(@Param('id') id: string): Promise<Loaded<Transportation>> {
+    findOne(@Param('id') id: string): Promise<TransportationReturn> {
         return this.transportationsService.findOne(+id);
     }
 
@@ -70,7 +84,7 @@ export class TransportationsController {
     fullUpdate(
         @Param('id') id: string,
         @Body() createTransporationDto: CreateTransportationDto,
-    ): Promise<Loaded<Transportation>> {
+    ): Promise<TransportationReturn> {
         return this.transportationsService.update(+id, createTransporationDto);
     }
 
@@ -86,7 +100,7 @@ export class TransportationsController {
     update(
         @Param('id') id: string,
         @Body() updateTransportationDto: UpdateTransportationDto,
-    ): Promise<Loaded<Transportation>> {
+    ): Promise<TransportationReturn> {
         if (
             updateTransportationDto.address === undefined &&
             updateTransportationDto.cost === undefined &&
@@ -108,7 +122,7 @@ export class TransportationsController {
      * @returns the deleted entity.
      */
     @Delete(':id')
-    remove(@Param('id') id: string): Promise<Loaded<Transportation>> {
+    remove(@Param('id') id: string): Promise<TransportationReturn> {
         return this.transportationsService.remove(+id);
     }
 }

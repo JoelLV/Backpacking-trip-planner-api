@@ -13,6 +13,14 @@ import { TrailsService } from './trails.service';
 import { CreateTrailDto } from './dto/create-trail.dto';
 import { UpdateTrailDto } from './dto/update-trail.dto';
 
+interface TrailReturn {
+    id: number,
+    name: string,
+    difficulty: string,
+    location: string,
+    length: number,
+    description: string
+}
 @Controller('trails')
 export class TrailsController {
     constructor(private readonly trailsService: TrailsService) {}
@@ -25,8 +33,16 @@ export class TrailsController {
      * @returns a trail entity object.
      */
     @Post()
-    create(@Body() createTrailDto: CreateTrailDto) {
-        return this.trailsService.create(createTrailDto);
+    async create(@Body() createTrailDto: CreateTrailDto): Promise<TrailReturn> {
+        const entity = await this.trailsService.create(createTrailDto);
+        return {
+            id: entity.id,
+            name: entity.name,
+            difficulty: entity.difficulty,
+            location: entity.location,
+            length: entity.length,
+            description: entity.description
+        }
     }
 
     /**
@@ -36,7 +52,7 @@ export class TrailsController {
      * @returns an array of trail entities.
      */
     @Get()
-    findAll() {
+    findAll(): Promise<TrailReturn[]> {
         return this.trailsService.findAll();
     }
 
@@ -48,7 +64,7 @@ export class TrailsController {
      * @returns the entity found.
      */
     @Get(':id')
-    findOne(@Param('id') id: string) {
+    findOne(@Param('id') id: string): Promise<TrailReturn> {
         return this.trailsService.findOne(+id);
     }
 
@@ -64,7 +80,7 @@ export class TrailsController {
     fullUpdate(
         @Param('id') id: string,
         @Body() createTrailDto: CreateTrailDto,
-    ) {
+    ): Promise<TrailReturn> {
         return this.trailsService.update(+id, createTrailDto);
     }
 
@@ -77,7 +93,7 @@ export class TrailsController {
      * @returns the modified entity.
      */
     @Patch(':id')
-    update(@Param('id') id: string, @Body() updateTrailDto: UpdateTrailDto) {
+    update(@Param('id') id: string, @Body() updateTrailDto: UpdateTrailDto): Promise<TrailReturn> {
         if (
             updateTrailDto.name === undefined &&
             updateTrailDto.description === undefined &&
@@ -100,7 +116,7 @@ export class TrailsController {
      * @returns the deleted entity.
      */
     @Delete(':id')
-    remove(@Param('id') id: string) {
+    remove(@Param('id') id: string): Promise<TrailReturn> {
         return this.trailsService.remove(+id);
     }
 }

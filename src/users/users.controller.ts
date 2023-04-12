@@ -12,9 +12,12 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
-import { Loaded } from '@mikro-orm/core';
 
+interface UserReturn {
+    id: string,
+    apiKey: string,
+    name: string
+}
 @Controller('users')
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
@@ -27,8 +30,13 @@ export class UsersController {
      * @returns a user entity object.
      */
     @Post()
-    create(@Body() createUserDto: CreateUserDto): Promise<Loaded<User>> {
-        return this.usersService.create(createUserDto);
+    async create(@Body() createUserDto: CreateUserDto): Promise<UserReturn> {
+        const entity = await this.usersService.create(createUserDto);
+        return {
+            id: entity.id,
+            apiKey: entity.apiKey,
+            name: entity.name
+        }
     }
 
     /**
@@ -40,8 +48,13 @@ export class UsersController {
      * @returns the user entity created.
      */
     @Post('/admin')
-    createAdmin(@Body() createUserDto: CreateUserDto): Promise<Loaded<User>> {
-        return this.usersService.create(createUserDto)
+    async createAdmin(@Body() createUserDto: CreateUserDto): Promise<UserReturn> {
+        const entity = await this.usersService.create(createUserDto);
+        return {
+            id: entity.id,
+            apiKey: entity.apiKey,
+            name: entity.name
+        }
     }
 
     /**
@@ -51,7 +64,7 @@ export class UsersController {
      * @returns an array of user entities.
      */
     @Get()
-    findAll(): Promise<Loaded<User>[]> {
+    findAll(): Promise<UserReturn[]> {
         return this.usersService.findAll();
     }
 
@@ -63,7 +76,7 @@ export class UsersController {
      * @returns the entity found.
      */
     @Get(':id')
-    findOne(@Param('id') id: string): Promise<Loaded<User>> {
+    findOne(@Param('id') id: string): Promise<UserReturn> {
         return this.usersService.findOne(id);
     }
 
@@ -79,7 +92,7 @@ export class UsersController {
     fullUpdate(
         @Param('id') id: string,
         @Body() createUserDto: CreateUserDto,
-    ): Promise<Loaded<User>> {
+    ): Promise<UserReturn> {
         return this.usersService.update(id, createUserDto);
     }
 
@@ -95,7 +108,7 @@ export class UsersController {
     update(
         @Param('id') id: string,
         @Body() updateUserDto: UpdateUserDto,
-    ): Promise<Loaded<User>> {
+    ): Promise<UserReturn> {
         if (updateUserDto.name === undefined) {
             throw new BadRequestException(
                 'Must provide at least one property.',
@@ -112,7 +125,7 @@ export class UsersController {
      * @returns the deleted entity.
      */
     @Delete(':id')
-    remove(@Param('id') id: string): Promise<Loaded<User>> {
+    remove(@Param('id') id: string): Promise<UserReturn> {
         return this.usersService.remove(id);
     }
 }

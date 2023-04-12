@@ -12,9 +12,17 @@ import {
 import { LodgingsService } from './lodgings.service';
 import { CreateLodgingDto } from './dto/create-lodging.dto';
 import { UpdateLodgingDto } from './dto/update-lodging.dto';
-import { Lodging } from './entities/lodging.entity';
-import { Loaded } from '@mikro-orm/core';
 
+interface LodgingReturn {
+    id: number,
+    cost: number,
+    name: string,
+    description: string,
+    address: string,
+    phone: string,
+    email: string,
+    rating: number
+}
 @Controller('lodgings')
 export class LodgingsController {
     constructor(private readonly lodgingsService: LodgingsService) {}
@@ -27,8 +35,18 @@ export class LodgingsController {
      * @returns a lodging entity object.
      */
     @Post()
-    create(@Body() createLodgingDto: CreateLodgingDto): Promise<Lodging> {
-        return this.lodgingsService.create(createLodgingDto);
+    async create(@Body() createLodgingDto: CreateLodgingDto): Promise<LodgingReturn> {
+        const entity = await this.lodgingsService.create(createLodgingDto);
+        return {
+            id: entity.id,
+            cost: entity.cost,
+            name: entity.name,
+            description: entity.description,
+            address: entity.address,
+            phone: entity.phone,
+            email: entity.email,
+            rating: entity.rating
+        }
     }
 
     /**
@@ -38,7 +56,7 @@ export class LodgingsController {
      * @returns an array of lodging entities.
      */
     @Get()
-    findAll(): Promise<Loaded<Lodging>[]> {
+    findAll(): Promise<LodgingReturn[]> {
         return this.lodgingsService.findAll();
     }
 
@@ -50,7 +68,7 @@ export class LodgingsController {
      * @returns the entity found.
      */
     @Get(':id')
-    findOne(@Param('id') id: string): Promise<Loaded<Lodging>> {
+    findOne(@Param('id') id: string): Promise<LodgingReturn> {
         return this.lodgingsService.findOne(+id);
     }
 
@@ -66,7 +84,7 @@ export class LodgingsController {
     fullUpdate(
         @Param('id') id: string,
         @Body() createLodgingDto: CreateLodgingDto,
-    ): Promise<Loaded<Lodging>> {
+    ): Promise<LodgingReturn> {
         return this.lodgingsService.update(+id, createLodgingDto);
     }
 
@@ -82,7 +100,7 @@ export class LodgingsController {
     update(
         @Param('id') id: string,
         @Body() updateLodgingDto: UpdateLodgingDto,
-    ): Promise<Loaded<Lodging>> {
+    ): Promise<LodgingReturn> {
         if (
             updateLodgingDto.address === undefined &&
             updateLodgingDto.cost === undefined &&
@@ -107,7 +125,7 @@ export class LodgingsController {
      * @returns the deleted entity.
      */
     @Delete(':id')
-    remove(@Param('id') id: string): Promise<Loaded<Lodging>> {
+    remove(@Param('id') id: string): Promise<LodgingReturn> {
         return this.lodgingsService.remove(+id);
     }
 }

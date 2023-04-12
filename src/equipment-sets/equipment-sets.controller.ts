@@ -13,6 +13,11 @@ import { EquipmentSetsService } from './equipment-sets.service';
 import { CreateEquipmentSetDto } from './dto/create-equipment-set.dto';
 import { UpdateEquipmentSetDto } from './dto/update-equipment-set.dto';
 
+interface EquipmentSetReturn {
+    id: number,
+    name: string,
+    description: string
+}
 @Controller('equipment-sets')
 export class EquipmentSetsController {
     constructor(private readonly equipmentSetsService: EquipmentSetsService) {}
@@ -25,8 +30,13 @@ export class EquipmentSetsController {
      * @returns a equipment set entity object.
      */
     @Post()
-    create(@Body() createEquipmentSetDto: CreateEquipmentSetDto) {
-        return this.equipmentSetsService.create(createEquipmentSetDto);
+    async create(@Body() createEquipmentSetDto: CreateEquipmentSetDto): Promise<EquipmentSetReturn> {
+        const entity = await this.equipmentSetsService.create(createEquipmentSetDto);
+        return {
+            id: entity.id,
+            name: entity.name,
+            description: entity.description
+        }
     }
 
     /**
@@ -36,7 +46,7 @@ export class EquipmentSetsController {
      * @returns an array of equipment set entities.
      */
     @Get()
-    findAll() {
+    async findAll(): Promise<EquipmentSetReturn[]> {
         return this.equipmentSetsService.findAll();
     }
 
@@ -48,7 +58,7 @@ export class EquipmentSetsController {
      * @returns the entity found.
      */
     @Get(':id')
-    findOne(@Param('id') id: string) {
+    findOne(@Param('id') id: string): Promise<EquipmentSetReturn> {
         return this.equipmentSetsService.findOne(+id);
     }
 
@@ -64,7 +74,7 @@ export class EquipmentSetsController {
     fullUpdate(
         @Param('id') id: string,
         @Body() createEquipmentSetDto: CreateEquipmentSetDto,
-    ) {
+    ): Promise<EquipmentSetReturn> {
         return this.equipmentSetsService.update(+id, createEquipmentSetDto);
     }
 
@@ -80,7 +90,7 @@ export class EquipmentSetsController {
     update(
         @Param('id') id: string,
         @Body() updateEquipmentSetDto: UpdateEquipmentSetDto,
-    ) {
+    ): Promise<EquipmentSetReturn> {
         if (
             updateEquipmentSetDto.description === undefined &&
             updateEquipmentSetDto.name === undefined
@@ -100,7 +110,7 @@ export class EquipmentSetsController {
      * @returns the deleted entity.
      */
     @Delete(':id')
-    remove(@Param('id') id: string) {
+    remove(@Param('id') id: string): Promise<EquipmentSetReturn> {
         return this.equipmentSetsService.remove(+id);
     }
 }
