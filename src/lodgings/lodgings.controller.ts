@@ -12,17 +12,8 @@ import {
 import { LodgingsService } from './lodgings.service';
 import { CreateLodgingDto } from './dto/create-lodging.dto';
 import { UpdateLodgingDto } from './dto/update-lodging.dto';
+import { Lodging } from './model/lodging.model';
 
-interface LodgingReturn {
-    id: number,
-    cost: number,
-    name: string,
-    description: string,
-    address: string,
-    phone: string,
-    email: string,
-    rating: number
-}
 @Controller('lodgings')
 export class LodgingsController {
     constructor(private readonly lodgingsService: LodgingsService) {}
@@ -35,7 +26,7 @@ export class LodgingsController {
      * @returns a lodging entity object.
      */
     @Post()
-    async create(@Body() createLodgingDto: CreateLodgingDto): Promise<LodgingReturn> {
+    async create(@Body() createLodgingDto: CreateLodgingDto): Promise<Lodging> {
         const entity = await this.lodgingsService.create(createLodgingDto);
         return {
             id: entity.id,
@@ -56,7 +47,7 @@ export class LodgingsController {
      * @returns an array of lodging entities.
      */
     @Get()
-    findAll(): Promise<LodgingReturn[]> {
+    findAll(): Promise<Lodging[]> {
         return this.lodgingsService.findAll();
     }
 
@@ -68,7 +59,7 @@ export class LodgingsController {
      * @returns the entity found.
      */
     @Get(':id')
-    findOne(@Param('id') id: string): Promise<LodgingReturn> {
+    findOne(@Param('id') id: string): Promise<Lodging> {
         return this.lodgingsService.findOne(+id);
     }
 
@@ -84,7 +75,7 @@ export class LodgingsController {
     fullUpdate(
         @Param('id') id: string,
         @Body() createLodgingDto: CreateLodgingDto,
-    ): Promise<LodgingReturn> {
+    ): Promise<Lodging> {
         return this.lodgingsService.update(+id, createLodgingDto);
     }
 
@@ -100,7 +91,7 @@ export class LodgingsController {
     update(
         @Param('id') id: string,
         @Body() updateLodgingDto: UpdateLodgingDto,
-    ): Promise<LodgingReturn> {
+    ): Promise<Lodging> {
         if (
             updateLodgingDto.address === undefined &&
             updateLodgingDto.cost === undefined &&
@@ -125,7 +116,7 @@ export class LodgingsController {
      * @returns the deleted entity.
      */
     @Delete(':id')
-    remove(@Param('id') id: string): Promise<LodgingReturn> {
+    remove(@Param('id') id: string): Promise<Lodging> {
         return this.lodgingsService.remove(+id);
     }
 }

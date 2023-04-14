@@ -12,16 +12,7 @@ import {
 import { TransportationsService } from './transportations.service';
 import { CreateTransportationDto } from './dto/create-transportation.dto';
 import { UpdateTransportationDto } from './dto/update-transportation.dto';
-import { Transportation } from './entities/transportation.entity';
-import { Loaded } from '@mikro-orm/core';
-
-interface TransportationReturn {
-    id: number,
-    cost: number,
-    name: string,
-    address: string,
-    description: string
-}
+import { Transportation } from './model/transportation.model';
 @Controller('transportations')
 export class TransportationsController {
     constructor(
@@ -38,7 +29,7 @@ export class TransportationsController {
     @Post()
     async create(
         @Body() createTransportationDto: CreateTransportationDto,
-    ): Promise<TransportationReturn> {
+    ): Promise<Transportation> {
         const entity = await this.transportationsService.create(createTransportationDto);
         return {
             id: entity.id,
@@ -56,7 +47,7 @@ export class TransportationsController {
      * @returns an array of transportation entities.
      */
     @Get()
-    findAll(): Promise<TransportationReturn[]> {
+    findAll(): Promise<Transportation[]> {
         return this.transportationsService.findAll();
     }
 
@@ -68,7 +59,7 @@ export class TransportationsController {
      * @returns the entity found.
      */
     @Get(':id')
-    findOne(@Param('id') id: string): Promise<TransportationReturn> {
+    findOne(@Param('id') id: string): Promise<Transportation> {
         return this.transportationsService.findOne(+id);
     }
 
@@ -84,7 +75,7 @@ export class TransportationsController {
     fullUpdate(
         @Param('id') id: string,
         @Body() createTransporationDto: CreateTransportationDto,
-    ): Promise<TransportationReturn> {
+    ): Promise<Transportation> {
         return this.transportationsService.update(+id, createTransporationDto);
     }
 
@@ -100,7 +91,7 @@ export class TransportationsController {
     update(
         @Param('id') id: string,
         @Body() updateTransportationDto: UpdateTransportationDto,
-    ): Promise<TransportationReturn> {
+    ): Promise<Transportation> {
         if (
             updateTransportationDto.address === undefined &&
             updateTransportationDto.cost === undefined &&
@@ -122,7 +113,7 @@ export class TransportationsController {
      * @returns the deleted entity.
      */
     @Delete(':id')
-    remove(@Param('id') id: string): Promise<TransportationReturn> {
+    remove(@Param('id') id: string): Promise<Transportation> {
         return this.transportationsService.remove(+id);
     }
 }

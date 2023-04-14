@@ -12,12 +12,7 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-
-interface UserReturn {
-    id: string,
-    apiKey: string,
-    name: string
-}
+import { User } from './model/user.model';
 @Controller('users')
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
@@ -30,7 +25,7 @@ export class UsersController {
      * @returns a user entity object.
      */
     @Post()
-    async create(@Body() createUserDto: CreateUserDto): Promise<UserReturn> {
+    async create(@Body() createUserDto: CreateUserDto): Promise<User> {
         const entity = await this.usersService.create(createUserDto);
         return {
             id: entity.id,
@@ -48,7 +43,7 @@ export class UsersController {
      * @returns the user entity created.
      */
     @Post('/admin')
-    async createAdmin(@Body() createUserDto: CreateUserDto): Promise<UserReturn> {
+    async createAdmin(@Body() createUserDto: CreateUserDto): Promise<User> {
         const entity = await this.usersService.create(createUserDto);
         return {
             id: entity.id,
@@ -64,7 +59,7 @@ export class UsersController {
      * @returns an array of user entities.
      */
     @Get()
-    findAll(): Promise<UserReturn[]> {
+    findAll(): Promise<User[]> {
         return this.usersService.findAll();
     }
 
@@ -76,7 +71,7 @@ export class UsersController {
      * @returns the entity found.
      */
     @Get(':id')
-    findOne(@Param('id') id: string): Promise<UserReturn> {
+    findOne(@Param('id') id: string): Promise<User> {
         return this.usersService.findOne(id);
     }
 
@@ -92,7 +87,7 @@ export class UsersController {
     fullUpdate(
         @Param('id') id: string,
         @Body() createUserDto: CreateUserDto,
-    ): Promise<UserReturn> {
+    ): Promise<User> {
         return this.usersService.update(id, createUserDto);
     }
 
@@ -108,7 +103,7 @@ export class UsersController {
     update(
         @Param('id') id: string,
         @Body() updateUserDto: UpdateUserDto,
-    ): Promise<UserReturn> {
+    ): Promise<User> {
         if (updateUserDto.name === undefined) {
             throw new BadRequestException(
                 'Must provide at least one property.',
@@ -125,7 +120,7 @@ export class UsersController {
      * @returns the deleted entity.
      */
     @Delete(':id')
-    remove(@Param('id') id: string): Promise<UserReturn> {
+    remove(@Param('id') id: string): Promise<User> {
         return this.usersService.remove(id);
     }
 }

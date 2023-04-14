@@ -12,16 +12,8 @@ import {
 import { TripsService } from './trips.service';
 import { CreateTripDto } from './dto/create-trip.dto';
 import { UpdateTripDto } from './dto/update-trip.dto';
+import { Trip } from './model/trip.model';
 
-interface TripReturn {
-    id: number,
-    equipment_set_id: number,
-    trail_id: number,
-    user_id: string,
-    lodging_id: number,
-    transportation_id: number,
-    planned_date: Date
-}
 @Controller('trips')
 export class TripsController {
     constructor(private readonly tripsService: TripsService) {}
@@ -34,7 +26,7 @@ export class TripsController {
      * @returns a trip entity entity object.
      */
     @Post()
-    async create(@Body() createTripDto: CreateTripDto): Promise<TripReturn> {
+    async create(@Body() createTripDto: CreateTripDto): Promise<Trip> {
         const entity = await this.tripsService.create(createTripDto);
         return {
             id: entity.id,
@@ -54,7 +46,7 @@ export class TripsController {
      * @returns an array of trip entities.
      */
     @Get()
-    async findAll(): Promise<TripReturn[]> {
+    async findAll(): Promise<Trip[]> {
         const entities = await this.tripsService.findAll();
         return entities.map(entity => {
             return {
@@ -77,7 +69,7 @@ export class TripsController {
      * @returns the entity found.
      */
     @Get(':id')
-    async findOne(@Param('id') id: string): Promise<TripReturn> {
+    async findOne(@Param('id') id: string): Promise<Trip> {
         const entity = await this.tripsService.findOne(+id);
         return {
             id: entity.id,
@@ -99,7 +91,7 @@ export class TripsController {
      * @returns the modified entity.
      */
     @Put(':id')
-    async fullUpdate(@Param('id') id: string, @Body() createTripDto: CreateTripDto): Promise<TripReturn> {
+    async fullUpdate(@Param('id') id: string, @Body() createTripDto: CreateTripDto): Promise<Trip> {
         const entity = await this.tripsService.update(+id, createTripDto);
         return {
             id: entity.id,
@@ -121,7 +113,7 @@ export class TripsController {
      * @returns the modified entity.
      */
     @Patch(':id')
-    async update(@Param('id') id: string, @Body() updateTripDto: UpdateTripDto): Promise<TripReturn> {
+    async update(@Param('id') id: string, @Body() updateTripDto: UpdateTripDto): Promise<Trip> {
         if (
             updateTripDto.equipment_set_id === undefined &&
             updateTripDto.lodging_id === undefined &&
@@ -154,7 +146,7 @@ export class TripsController {
      * @returns the deleted entity.
      */
     @Delete(':id')
-    async remove(@Param('id') id: string): Promise<TripReturn> {
+    async remove(@Param('id') id: string): Promise<Trip> {
         const entity = await this.tripsService.remove(+id);
         return {
             id: entity.id,

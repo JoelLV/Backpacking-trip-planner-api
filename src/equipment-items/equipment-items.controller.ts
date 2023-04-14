@@ -12,13 +12,8 @@ import {
 import { EquipmentItemsService } from './equipment-items.service';
 import { CreateEquipmentItemDto } from './dto/create-equipment-item.dto';
 import { UpdateEquipmentItemDto } from './dto/update-equipment-item.dto';
+import { EquipmentItem } from './model/equipment-item.model';
 
-interface EquipmentItemReturn {
-    id: number,
-    gear_item_id: number,
-    equipment_set_id: number,
-    quantity: number
-}
 @Controller('equipment-items')
 export class EquipmentItemsController {
     constructor(
@@ -35,7 +30,7 @@ export class EquipmentItemsController {
     @Post()
     async create(
         @Body() createEquipmentItemDto: CreateEquipmentItemDto,
-    ): Promise<EquipmentItemReturn> {
+    ): Promise<EquipmentItem> {
         const entity = await this.equipmentItemsService.create(createEquipmentItemDto);
         return {
             id: entity.id,
@@ -52,7 +47,7 @@ export class EquipmentItemsController {
      * @returns an array of equipment item entities.
      */
     @Get()
-    async findAll(): Promise<EquipmentItemReturn[]> {
+    async findAll(): Promise<EquipmentItem[]> {
         const entities = await this.equipmentItemsService.findAll();
         return entities.map(entity => {
             return {
@@ -72,7 +67,7 @@ export class EquipmentItemsController {
      * @returns the entity found.
      */
     @Get(':id')
-    async findOne(@Param('id') id: string): Promise<EquipmentItemReturn> {
+    async findOne(@Param('id') id: string): Promise<EquipmentItem> {
         const entity = await this.equipmentItemsService.findOne(+id);
         return {
             id: entity.id,
@@ -94,7 +89,7 @@ export class EquipmentItemsController {
     async fullUpdate(
         @Param('id') id: string,
         @Body() createEquipmentItemDto: CreateEquipmentItemDto,
-    ): Promise<EquipmentItemReturn> {
+    ): Promise<EquipmentItem> {
         const entity = await this.equipmentItemsService.update(+id, createEquipmentItemDto);
         return {
             id: entity.id,
@@ -116,7 +111,7 @@ export class EquipmentItemsController {
     async update(
         @Param('id') id: string,
         @Body() updateEquipmentItemDto: UpdateEquipmentItemDto,
-    ): Promise<EquipmentItemReturn> {
+    ): Promise<EquipmentItem> {
         if (
             updateEquipmentItemDto.equipment_set_id === undefined &&
             updateEquipmentItemDto.gear_item_id === undefined &&
@@ -144,7 +139,7 @@ export class EquipmentItemsController {
      * @returns the deleted entity.
      */
     @Delete(':id')
-    async remove(@Param('id') id: string): Promise<EquipmentItemReturn> {
+    async remove(@Param('id') id: string): Promise<EquipmentItem> {
         const entity = await this.equipmentItemsService.remove(+id);
         return {
             id: entity.id,
