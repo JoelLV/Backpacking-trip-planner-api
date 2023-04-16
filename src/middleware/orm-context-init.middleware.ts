@@ -1,7 +1,7 @@
 import { EntityManager } from '@mikro-orm/mysql';
 import { NestMiddleware, Injectable } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import {  RequestContext } from "@mikro-orm/core"
+import { RequestContext } from '@mikro-orm/core';
 
 @Injectable()
 export class OrmContextInitMiddleware implements NestMiddleware {
@@ -17,6 +17,6 @@ export class OrmContextInitMiddleware implements NestMiddleware {
      * @param next next function in the middleware chain.
      */
     use(request: Request, response: Response, next: NextFunction) {
-        RequestContext.create(this.em, next)
+        RequestContext.create(this.em, next);
     }
 }

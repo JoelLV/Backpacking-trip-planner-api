@@ -17,19 +17,39 @@ export class Trip {
     })
     readonly id!: number;
 
-    @ManyToOne({ entity: () => EquipmentSet, fieldName: 'equipment_set_id', 'onDelete': 'cascade' })
+    @ManyToOne({
+        entity: () => EquipmentSet,
+        fieldName: 'equipment_set_id',
+        onDelete: 'cascade',
+    })
     equipment_set!: EquipmentSet;
 
-    @ManyToOne({ entity: () => Trail, fieldName: 'trail_id', 'onDelete': 'cascade' })
+    @ManyToOne({
+        entity: () => Trail,
+        fieldName: 'trail_id',
+        onDelete: 'cascade',
+    })
     trail!: Trail;
 
-    @ManyToOne({ entity: () => User, fieldName: 'user_id', 'onDelete': 'cascade' })
+    @ManyToOne({
+        entity: () => User,
+        fieldName: 'user_id',
+        onDelete: 'cascade',
+    })
     user!: User;
 
-    @ManyToOne({ entity: () => Lodging, fieldName: 'lodging_id', 'onDelete': 'cascade' })
+    @ManyToOne({
+        entity: () => Lodging,
+        fieldName: 'lodging_id',
+        onDelete: 'cascade',
+    })
     lodging!: Lodging;
 
-    @ManyToOne({ entity: () => Transportation, fieldName: 'transporation_id', 'onDelete': 'cascade' })
+    @ManyToOne({
+        entity: () => Transportation,
+        fieldName: 'transporation_id',
+        onDelete: 'cascade',
+    })
     transporation!: Transportation;
 
     @Property()

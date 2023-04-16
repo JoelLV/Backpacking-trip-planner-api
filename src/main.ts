@@ -11,9 +11,14 @@ async function bootstrap() {
         .setDescription('API documentation in how to interact with this tool.')
         .setVersion('1.0')
         .addTag('Endpoints')
-        .build()
-    const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig)
-    SwaggerModule.setup('api', app, swaggerDocument)
+        .addApiKey({
+            type: 'apiKey',
+            name: 'authentication',
+            in: 'header',
+        }, 'authentication')
+        .build();
+    const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
+    SwaggerModule.setup('api', app, swaggerDocument);
 
     app.useGlobalPipes(new ValidationPipe());
     await app.listen(3000);

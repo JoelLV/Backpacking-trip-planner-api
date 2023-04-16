@@ -13,7 +13,9 @@ import { LodgingsService } from './lodgings.service';
 import { CreateLodgingDto } from './dto/create-lodging.dto';
 import { UpdateLodgingDto } from './dto/update-lodging.dto';
 import { Lodging } from './model/lodging.model';
+import { ApiSecurity } from '@nestjs/swagger';
 
+@ApiSecurity('authentication', ['authentication'])
 @Controller('lodgings')
 export class LodgingsController {
     constructor(private readonly lodgingsService: LodgingsService) {}
@@ -36,8 +38,8 @@ export class LodgingsController {
             address: entity.address,
             phone: entity.phone,
             email: entity.email,
-            rating: entity.rating
-        }
+            rating: entity.rating,
+        };
     }
 
     /**

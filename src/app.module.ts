@@ -1,4 +1,9 @@
-import { Module, NestModule, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
+import {
+    Module,
+    NestModule,
+    MiddlewareConsumer,
+    RequestMethod,
+} from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { TripsModule } from './trips/trips.module';
 import { LodgingsModule } from './lodgings/lodgings.module';
@@ -31,6 +36,6 @@ export class AppModule implements NestModule {
         consumer
             .apply(OrmContextInitMiddleware, AuthMiddleware)
             .exclude({ path: '/users/admin', method: RequestMethod.POST })
-            .forRoutes({ path: '/*', method: RequestMethod.ALL })
+            .forRoutes({ path: '/*', method: RequestMethod.ALL });
     }
 }

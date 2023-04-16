@@ -1,8 +1,12 @@
 import { EntityManager } from '@mikro-orm/mysql';
-import { NestMiddleware, UnauthorizedException, Injectable } from '@nestjs/common';
+import {
+    NestMiddleware,
+    UnauthorizedException,
+    Injectable,
+} from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { User } from 'src/users/entities/user.entity';
-import { Loaded } from "@mikro-orm/core"
+import { Loaded } from '@mikro-orm/core';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
@@ -14,21 +18,25 @@ export class AuthMiddleware implements NestMiddleware {
      * by user exists in database, if no API key
      * is provided or the API key does not exists
      * in records, an 401 error will be raised.
-     * 
+     *
      * @param request User request.
      * @param response Not used.
      * @param next Next function in middleware chain.
      */
     async use(request: Request, response: Response, next: NextFunction) {
-        const { authentication } = request.headers
+        const { authentication } = request.headers;
 
         if (authentication === undefined) {
-            throw new UnauthorizedException("Must provide an API key for authentication.")
+            throw new UnauthorizedException(
+                'Must provide an API key for authentication.',
+            );
         }
-        const user: Loaded<User> | null = await this.em.findOne(User, { apiKey: authentication })
+        const user: Loaded<User> | null = await this.em.findOne(User, {
+            apiKey: authentication,
+        });
         if (!user) {
-            throw new UnauthorizedException("Invalid API key provided.")
+            throw new UnauthorizedException('Invalid API key provided.');
         }
-        next()
+        next();
     }
 }

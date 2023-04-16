@@ -13,7 +13,9 @@ import { EquipmentSetsService } from './equipment-sets.service';
 import { CreateEquipmentSetDto } from './dto/create-equipment-set.dto';
 import { UpdateEquipmentSetDto } from './dto/update-equipment-set.dto';
 import { EquipmentSet } from './model/equipment-set.model';
+import { ApiSecurity } from '@nestjs/swagger';
 
+@ApiSecurity('authentication', ['authentication'])
 @Controller('equipment-sets')
 export class EquipmentSetsController {
     constructor(private readonly equipmentSetsService: EquipmentSetsService) {}
@@ -26,13 +28,17 @@ export class EquipmentSetsController {
      * @returns a equipment set entity object.
      */
     @Post()
-    async create(@Body() createEquipmentSetDto: CreateEquipmentSetDto): Promise<EquipmentSet> {
-        const entity = await this.equipmentSetsService.create(createEquipmentSetDto);
+    async create(
+        @Body() createEquipmentSetDto: CreateEquipmentSetDto,
+    ): Promise<EquipmentSet> {
+        const entity = await this.equipmentSetsService.create(
+            createEquipmentSetDto,
+        );
         return {
             id: entity.id,
             name: entity.name,
-            description: entity.description
-        }
+            description: entity.description,
+        };
     }
 
     /**

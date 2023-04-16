@@ -13,10 +13,12 @@ import { GearItemsService } from './gear-items.service';
 import { CreateGearItemDto } from './dto/create-gear-item.dto';
 import { UpdateGearItemDto } from './dto/update-gear-item.dto';
 import { GearItem } from './model/gear-item.model';
+import { ApiSecurity } from '@nestjs/swagger';
 
+@ApiSecurity('authentication', ['authentication'])
 @Controller('gear-items')
 export class GearItemsController {
-    constructor(private readonly gearItemsService: GearItemsService) { }
+    constructor(private readonly gearItemsService: GearItemsService) {}
 
     /**
      * Creates a new gear item entity and stores it
@@ -33,8 +35,8 @@ export class GearItemsController {
         return {
             id: entity.id,
             name: entity.name,
-            is_consumable: entity.is_consumable
-        }
+            is_consumable: entity.is_consumable,
+        };
     }
 
     /**

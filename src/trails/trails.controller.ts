@@ -13,7 +13,9 @@ import { TrailsService } from './trails.service';
 import { CreateTrailDto } from './dto/create-trail.dto';
 import { UpdateTrailDto } from './dto/update-trail.dto';
 import { Trail } from './model/trail.model';
+import { ApiSecurity } from '@nestjs/swagger';
 
+@ApiSecurity('authentication', ['authentication'])
 @Controller('trails')
 export class TrailsController {
     constructor(private readonly trailsService: TrailsService) {}
@@ -34,8 +36,8 @@ export class TrailsController {
             difficulty: entity.difficulty,
             location: entity.location,
             length: entity.length,
-            description: entity.description
-        }
+            description: entity.description,
+        };
     }
 
     /**
@@ -86,7 +88,10 @@ export class TrailsController {
      * @returns the modified entity.
      */
     @Patch(':id')
-    update(@Param('id') id: string, @Body() updateTrailDto: UpdateTrailDto): Promise<Trail> {
+    update(
+        @Param('id') id: string,
+        @Body() updateTrailDto: UpdateTrailDto,
+    ): Promise<Trail> {
         if (
             updateTrailDto.name === undefined &&
             updateTrailDto.description === undefined &&

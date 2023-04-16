@@ -13,7 +13,9 @@ import { TripsService } from './trips.service';
 import { CreateTripDto } from './dto/create-trip.dto';
 import { UpdateTripDto } from './dto/update-trip.dto';
 import { Trip } from './model/trip.model';
+import { ApiSecurity } from '@nestjs/swagger';
 
+@ApiSecurity('authentication', ['authentication'])
 @Controller('trips')
 export class TripsController {
     constructor(private readonly tripsService: TripsService) {}
@@ -35,8 +37,8 @@ export class TripsController {
             user_id: entity.user.id,
             lodging_id: entity.lodging.id,
             transportation_id: entity.transporation.id,
-            planned_date: entity.planned_date
-        }
+            planned_date: entity.planned_date,
+        };
     }
 
     /**
@@ -48,7 +50,7 @@ export class TripsController {
     @Get()
     async findAll(): Promise<Trip[]> {
         const entities = await this.tripsService.findAll();
-        return entities.map(entity => {
+        return entities.map((entity) => {
             return {
                 id: entity.id,
                 equipment_set_id: entity.equipment_set.id,
@@ -56,9 +58,9 @@ export class TripsController {
                 user_id: entity.user.id,
                 lodging_id: entity.lodging.id,
                 transportation_id: entity.transporation.id,
-                planned_date: entity.planned_date
-            }
-        })
+                planned_date: entity.planned_date,
+            };
+        });
     }
 
     /**
@@ -78,8 +80,8 @@ export class TripsController {
             user_id: entity.user.id,
             lodging_id: entity.lodging.id,
             transportation_id: entity.transporation.id,
-            planned_date: entity.planned_date
-        }
+            planned_date: entity.planned_date,
+        };
     }
 
     /**
@@ -91,7 +93,10 @@ export class TripsController {
      * @returns the modified entity.
      */
     @Put(':id')
-    async fullUpdate(@Param('id') id: string, @Body() createTripDto: CreateTripDto): Promise<Trip> {
+    async fullUpdate(
+        @Param('id') id: string,
+        @Body() createTripDto: CreateTripDto,
+    ): Promise<Trip> {
         const entity = await this.tripsService.update(+id, createTripDto);
         return {
             id: entity.id,
@@ -100,8 +105,8 @@ export class TripsController {
             user_id: entity.user.id,
             lodging_id: entity.lodging.id,
             transportation_id: entity.transporation.id,
-            planned_date: entity.planned_date
-        }
+            planned_date: entity.planned_date,
+        };
     }
 
     /**
@@ -113,7 +118,10 @@ export class TripsController {
      * @returns the modified entity.
      */
     @Patch(':id')
-    async update(@Param('id') id: string, @Body() updateTripDto: UpdateTripDto): Promise<Trip> {
+    async update(
+        @Param('id') id: string,
+        @Body() updateTripDto: UpdateTripDto,
+    ): Promise<Trip> {
         if (
             updateTripDto.equipment_set_id === undefined &&
             updateTripDto.lodging_id === undefined &&
@@ -134,8 +142,8 @@ export class TripsController {
             user_id: entity.user.id,
             lodging_id: entity.lodging.id,
             transportation_id: entity.transporation.id,
-            planned_date: entity.planned_date
-        }
+            planned_date: entity.planned_date,
+        };
     }
 
     /**
@@ -155,7 +163,7 @@ export class TripsController {
             user_id: entity.user.id,
             lodging_id: entity.lodging.id,
             transportation_id: entity.transporation.id,
-            planned_date: entity.planned_date
-        }
+            planned_date: entity.planned_date,
+        };
     }
 }

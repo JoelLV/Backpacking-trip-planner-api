@@ -13,6 +13,9 @@ import { TransportationsService } from './transportations.service';
 import { CreateTransportationDto } from './dto/create-transportation.dto';
 import { UpdateTransportationDto } from './dto/update-transportation.dto';
 import { Transportation } from './model/transportation.model';
+import { ApiSecurity } from '@nestjs/swagger';
+
+@ApiSecurity('authentication', ['authentication'])
 @Controller('transportations')
 export class TransportationsController {
     constructor(
@@ -30,14 +33,16 @@ export class TransportationsController {
     async create(
         @Body() createTransportationDto: CreateTransportationDto,
     ): Promise<Transportation> {
-        const entity = await this.transportationsService.create(createTransportationDto);
+        const entity = await this.transportationsService.create(
+            createTransportationDto,
+        );
         return {
             id: entity.id,
             cost: entity.cost,
             name: entity.name,
             address: entity.address,
-            description: entity.description
-        }
+            description: entity.description,
+        };
     }
 
     /**

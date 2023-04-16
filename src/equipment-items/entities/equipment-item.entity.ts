@@ -17,10 +17,18 @@ export class EquipmentItem {
     })
     readonly id!: number;
 
-    @ManyToOne({ entity: () => GearItem, fieldName: 'gear_item_id', 'onDelete': 'cascade' })
+    @ManyToOne({
+        entity: () => GearItem,
+        fieldName: 'gear_item_id',
+        onDelete: 'cascade',
+    })
     gear_item!: GearItem;
 
-    @ManyToOne({ entity: () => EquipmentSet, fieldName: 'equipment_set_id', 'onDelete': 'cascade' })
+    @ManyToOne({
+        entity: () => EquipmentSet,
+        fieldName: 'equipment_set_id',
+        onDelete: 'cascade',
+    })
     equipment_set!: EquipmentSet;
 
     @Property()

@@ -13,12 +13,14 @@ import { EquipmentItemsService } from './equipment-items.service';
 import { CreateEquipmentItemDto } from './dto/create-equipment-item.dto';
 import { UpdateEquipmentItemDto } from './dto/update-equipment-item.dto';
 import { EquipmentItem } from './model/equipment-item.model';
+import { ApiSecurity } from '@nestjs/swagger';
 
+@ApiSecurity('authentication', ['authentication'])
 @Controller('equipment-items')
 export class EquipmentItemsController {
     constructor(
         private readonly equipmentItemsService: EquipmentItemsService,
-    ) { }
+    ) {}
 
     /**
      * Creates a new equipment item entity and stores it
@@ -31,13 +33,15 @@ export class EquipmentItemsController {
     async create(
         @Body() createEquipmentItemDto: CreateEquipmentItemDto,
     ): Promise<EquipmentItem> {
-        const entity = await this.equipmentItemsService.create(createEquipmentItemDto);
+        const entity = await this.equipmentItemsService.create(
+            createEquipmentItemDto,
+        );
         return {
             id: entity.id,
             gear_item_id: entity.gear_item.id,
             equipment_set_id: entity.equipment_set.id,
-            quantity: entity.quantity
-        }
+            quantity: entity.quantity,
+        };
     }
 
     /**
@@ -49,14 +53,14 @@ export class EquipmentItemsController {
     @Get()
     async findAll(): Promise<EquipmentItem[]> {
         const entities = await this.equipmentItemsService.findAll();
-        return entities.map(entity => {
+        return entities.map((entity) => {
             return {
                 id: entity.id,
                 gear_item_id: entity.gear_item.id,
                 equipment_set_id: entity.equipment_set.id,
-                quantity: entity.quantity
-            }
-        })
+                quantity: entity.quantity,
+            };
+        });
     }
 
     /**
@@ -73,8 +77,8 @@ export class EquipmentItemsController {
             id: entity.id,
             gear_item_id: entity.gear_item.id,
             equipment_set_id: entity.equipment_set.id,
-            quantity: entity.quantity
-        }
+            quantity: entity.quantity,
+        };
     }
 
     /**
@@ -90,13 +94,16 @@ export class EquipmentItemsController {
         @Param('id') id: string,
         @Body() createEquipmentItemDto: CreateEquipmentItemDto,
     ): Promise<EquipmentItem> {
-        const entity = await this.equipmentItemsService.update(+id, createEquipmentItemDto);
+        const entity = await this.equipmentItemsService.update(
+            +id,
+            createEquipmentItemDto,
+        );
         return {
             id: entity.id,
             gear_item_id: entity.gear_item.id,
             equipment_set_id: entity.equipment_set.id,
-            quantity: entity.quantity
-        }
+            quantity: entity.quantity,
+        };
     }
 
     /**
@@ -122,13 +129,16 @@ export class EquipmentItemsController {
             );
         }
 
-        const entity = await this.equipmentItemsService.update(+id, updateEquipmentItemDto);
+        const entity = await this.equipmentItemsService.update(
+            +id,
+            updateEquipmentItemDto,
+        );
         return {
             id: entity.id,
             equipment_set_id: entity.equipment_set.id,
             gear_item_id: entity.gear_item.id,
-            quantity: entity.quantity
-        }
+            quantity: entity.quantity,
+        };
     }
 
     /**
@@ -145,7 +155,7 @@ export class EquipmentItemsController {
             id: entity.id,
             gear_item_id: entity.gear_item.id,
             equipment_set_id: entity.equipment_set.id,
-            quantity: entity.quantity
-        }
+            quantity: entity.quantity,
+        };
     }
 }
