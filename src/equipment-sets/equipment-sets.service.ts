@@ -54,7 +54,7 @@ export class EquipmentSetsService {
         );
 
         if (!equipmentSet) {
-            throw new NotFoundException();
+            throw new NotFoundException('Equipment set specified not found.');
         }
         return equipmentSet;
     }

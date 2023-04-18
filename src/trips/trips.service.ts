@@ -86,7 +86,7 @@ export class TripsService {
         const trip: Loaded<Trip> | null = await this.em.findOne(Trip, { id });
 
         if (!trip) {
-            throw new NotFoundException();
+            throw new NotFoundException('Trip specified not found.');
         }
         return trip;
     }

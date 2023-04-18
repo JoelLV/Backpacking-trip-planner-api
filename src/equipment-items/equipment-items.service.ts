@@ -29,15 +29,20 @@ export class EquipmentItemsService {
      * true, otherwise false.
      *
      * @param equipmentItem The entity to check for uniqueness.
+     * @param isNew Flag that determines whether the entity is new or not.
      * @returns true if the equipment item is unique, otherwise false.
      */
-    async isUnique(equipmentItem: EquipmentItem): Promise<boolean> {
+    async isUnique(equipmentItem: EquipmentItem, isNew: boolean): Promise<boolean> {
         const repeatedEquipmentItem: EquipmentItem | null =
             await this.em.findOne(EquipmentItem, {
                 gear_item: equipmentItem.gear_item,
                 equipment_set: equipmentItem.equipment_set,
             });
-        return !repeatedEquipmentItem;
+        if (isNew) {
+            return !repeatedEquipmentItem
+        } else {
+            return !repeatedEquipmentItem || equipmentItem.id === repeatedEquipmentItem.id
+        }
     }
 
     /**
@@ -64,7 +69,7 @@ export class EquipmentItemsService {
         equipmentItem.gear_item = gearItem;
         equipmentItem.equipment_set = equipmentSet;
 
-        const entityIsUnique: boolean = await this.isUnique(equipmentItem);
+        const entityIsUnique: boolean = await this.isUnique(equipmentItem, true);
         if (entityIsUnique) {
             await this.em.persistAndFlush(equipmentItem);
         } else {
@@ -98,7 +103,7 @@ export class EquipmentItemsService {
             });
 
         if (!equipmentItem) {
-            throw new NotFoundException();
+            throw new NotFoundException('Equipment item specified not found.');
         }
         return equipmentItem;
     }
@@ -129,7 +134,7 @@ export class EquipmentItemsService {
                     updateEquipmentItemDto.equipment_set_id,
                 );
         }
-        const entityIsUnique: boolean = await this.isUnique(equipmentItem);
+        const entityIsUnique: boolean = await this.isUnique(equipmentItem, false);
         if (entityIsUnique) {
             await this.em.persistAndFlush(equipmentItem);
         } else {

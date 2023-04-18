@@ -50,7 +50,7 @@ export class GearItemsService {
         );
 
         if (!gearItem) {
-            throw new NotFoundException();
+            throw new NotFoundException('Gear item specified not found.');
         }
         return gearItem;
     }

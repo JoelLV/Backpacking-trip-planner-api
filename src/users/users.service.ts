@@ -45,7 +45,7 @@ export class UsersService {
         const user: Loaded<User> | null = await this.em.findOne(User, { id });
 
         if (!user) {
-            throw new NotFoundException();
+            throw new NotFoundException('User specified not found.');
         }
         return user;
     }

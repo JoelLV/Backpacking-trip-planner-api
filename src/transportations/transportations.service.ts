@@ -49,7 +49,7 @@ export class TransportationsService {
             await this.em.findOne(Transportation, { id });
 
         if (!transportation) {
-            throw new NotFoundException();
+            throw new NotFoundException('Transportation specified not found.');
         }
         return transportation;
     }

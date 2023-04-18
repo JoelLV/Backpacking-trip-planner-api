@@ -48,7 +48,7 @@ export class LodgingsService {
         });
 
         if (!lodging) {
-            throw new NotFoundException();
+            throw new NotFoundException('Lodging specified not found.');
         }
         return lodging;
     }

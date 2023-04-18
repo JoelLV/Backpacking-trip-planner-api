@@ -47,7 +47,7 @@ export class TrailsService {
         });
 
         if (!trail) {
-            throw new NotFoundException();
+            throw new NotFoundException('Trail specified not found.');
         }
         return trail;
     }
