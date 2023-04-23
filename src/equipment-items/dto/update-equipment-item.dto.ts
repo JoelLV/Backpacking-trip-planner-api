@@ -1,6 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateEquipmentItemDto } from './create-equipment-item.dto';
-import { IsInt } from 'class-validator';
+import { IsInt, Max, Min } from 'class-validator';
 
 export class UpdateEquipmentItemDto extends PartialType(
     CreateEquipmentItemDto,
@@ -12,5 +12,7 @@ export class UpdateEquipmentItemDto extends PartialType(
     equipment_set_id?: number;
 
     @IsInt()
+    @Max(10000)
+    @Min(0)
     quantity?: number;
 }

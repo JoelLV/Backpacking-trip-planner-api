@@ -13,8 +13,10 @@ import { TripsService } from './trips.service';
 import { CreateTripDto } from './dto/create-trip.dto';
 import { UpdateTripDto } from './dto/update-trip.dto';
 import { Trip } from './model/trip.model';
-import { ApiSecurity } from '@nestjs/swagger';
+import { ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { NumIdRequestParam } from 'src/validators/num-id-request-param.validator';
 
+@ApiTags('Trips')
 @ApiSecurity('authentication', ['authentication'])
 @Controller('trips')
 export class TripsController {
@@ -71,7 +73,7 @@ export class TripsController {
      * @returns the entity found.
      */
     @Get(':id')
-    async findOne(@Param('id') id: string): Promise<Trip> {
+    async findOne(@Param() { id }: NumIdRequestParam): Promise<Trip> {
         const entity = await this.tripsService.findOne(+id);
         return {
             id: entity.id,
@@ -94,7 +96,7 @@ export class TripsController {
      */
     @Put(':id')
     async fullUpdate(
-        @Param('id') id: string,
+        @Param() { id }: NumIdRequestParam,
         @Body() createTripDto: CreateTripDto,
     ): Promise<Trip> {
         const entity = await this.tripsService.update(+id, createTripDto);
@@ -119,7 +121,7 @@ export class TripsController {
      */
     @Patch(':id')
     async update(
-        @Param('id') id: string,
+        @Param() { id }: NumIdRequestParam,
         @Body() updateTripDto: UpdateTripDto,
     ): Promise<Trip> {
         if (
@@ -154,7 +156,7 @@ export class TripsController {
      * @returns the deleted entity.
      */
     @Delete(':id')
-    async remove(@Param('id') id: string): Promise<Trip> {
+    async remove(@Param() { id }: NumIdRequestParam): Promise<Trip> {
         const entity = await this.tripsService.remove(+id);
         return {
             id: entity.id,

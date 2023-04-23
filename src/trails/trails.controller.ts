@@ -13,8 +13,10 @@ import { TrailsService } from './trails.service';
 import { CreateTrailDto } from './dto/create-trail.dto';
 import { UpdateTrailDto } from './dto/update-trail.dto';
 import { Trail } from './model/trail.model';
-import { ApiSecurity } from '@nestjs/swagger';
+import { ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { NumIdRequestParam } from 'src/validators/num-id-request-param.validator';
 
+@ApiTags('Trails')
 @ApiSecurity('authentication', ['authentication'])
 @Controller('trails')
 export class TrailsController {
@@ -59,7 +61,7 @@ export class TrailsController {
      * @returns the entity found.
      */
     @Get(':id')
-    findOne(@Param('id') id: string): Promise<Trail> {
+    findOne(@Param() { id }: NumIdRequestParam): Promise<Trail> {
         return this.trailsService.findOne(+id);
     }
 
@@ -73,7 +75,7 @@ export class TrailsController {
      */
     @Put(':id')
     fullUpdate(
-        @Param('id') id: string,
+        @Param() { id }: NumIdRequestParam,
         @Body() createTrailDto: CreateTrailDto,
     ): Promise<Trail> {
         return this.trailsService.update(+id, createTrailDto);
@@ -89,7 +91,7 @@ export class TrailsController {
      */
     @Patch(':id')
     update(
-        @Param('id') id: string,
+        @Param() { id }: NumIdRequestParam,
         @Body() updateTrailDto: UpdateTrailDto,
     ): Promise<Trail> {
         if (
@@ -114,7 +116,7 @@ export class TrailsController {
      * @returns the deleted entity.
      */
     @Delete(':id')
-    remove(@Param('id') id: string): Promise<Trail> {
+    remove(@Param() { id }: NumIdRequestParam): Promise<Trail> {
         return this.trailsService.remove(+id);
     }
 }

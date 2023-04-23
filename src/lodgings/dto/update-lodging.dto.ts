@@ -1,6 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateLodgingDto } from './create-lodging.dto';
-import { IsInt, IsNumber, IsString, Length, Max } from 'class-validator';
+import { IsInt, IsNumber, IsString, Length, Max, Min } from 'class-validator';
 export class UpdateLodgingDto extends PartialType(CreateLodgingDto) {
     @IsNumber()
     @Max(99999999.99)
@@ -27,6 +27,8 @@ export class UpdateLodgingDto extends PartialType(CreateLodgingDto) {
     email?: string;
 
     @IsInt()
+    @Max(10)
+    @Min(1)
     rating?: number;
 
     constructor() {

@@ -13,8 +13,10 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './model/user.model';
-import { ApiSecurity } from '@nestjs/swagger';
+import { ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { StringIdRequestParam } from 'src/validators/string-id-request-param.validator';
 
+@ApiTags('Users')
 @Controller('users')
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
@@ -76,7 +78,7 @@ export class UsersController {
      */
     @ApiSecurity('authentication', ['authentication'])
     @Get(':id')
-    findOne(@Param('id') id: string): Promise<User> {
+    findOne(@Param() { id }: StringIdRequestParam): Promise<User> {
         return this.usersService.findOne(id);
     }
 
@@ -91,7 +93,7 @@ export class UsersController {
     @ApiSecurity('authentication', ['authentication'])
     @Put(':id')
     fullUpdate(
-        @Param('id') id: string,
+        @Param() { id }: StringIdRequestParam,
         @Body() createUserDto: CreateUserDto,
     ): Promise<User> {
         return this.usersService.update(id, createUserDto);
@@ -108,7 +110,7 @@ export class UsersController {
     @ApiSecurity('authentication', ['authentication'])
     @Patch(':id')
     update(
-        @Param('id') id: string,
+        @Param() { id }: StringIdRequestParam,
         @Body() updateUserDto: UpdateUserDto,
     ): Promise<User> {
         if (updateUserDto.name === undefined) {
@@ -128,7 +130,7 @@ export class UsersController {
      */
     @ApiSecurity('authentication', ['authentication'])
     @Delete(':id')
-    remove(@Param('id') id: string): Promise<User> {
+    remove(@Param() { id }: StringIdRequestParam): Promise<User> {
         return this.usersService.remove(id);
     }
 }

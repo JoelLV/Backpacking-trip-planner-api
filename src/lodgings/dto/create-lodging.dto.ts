@@ -5,6 +5,7 @@ import {
     IsString,
     Length,
     Max,
+    Min,
 } from 'class-validator';
 export class CreateLodgingDto {
     @IsNotEmpty()
@@ -39,5 +40,7 @@ export class CreateLodgingDto {
 
     @IsNotEmpty()
     @IsInt()
+    @Max(10)
+    @Min(1)
     rating!: number;
 }

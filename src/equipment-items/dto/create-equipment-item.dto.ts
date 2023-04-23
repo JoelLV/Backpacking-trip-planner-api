@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty } from 'class-validator';
+import { IsInt, IsNotEmpty, Max, Min } from 'class-validator';
 
 export class CreateEquipmentItemDto {
     @IsNotEmpty()
@@ -11,5 +11,7 @@ export class CreateEquipmentItemDto {
 
     @IsNotEmpty()
     @IsInt()
+    @Max(10000)
+    @Min(0)
     quantity!: number;
 }

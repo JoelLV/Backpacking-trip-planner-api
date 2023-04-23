@@ -13,8 +13,10 @@ import { LodgingsService } from './lodgings.service';
 import { CreateLodgingDto } from './dto/create-lodging.dto';
 import { UpdateLodgingDto } from './dto/update-lodging.dto';
 import { Lodging } from './model/lodging.model';
-import { ApiSecurity } from '@nestjs/swagger';
+import { ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { NumIdRequestParam } from 'src/validators/num-id-request-param.validator';
 
+@ApiTags('Lodgings')
 @ApiSecurity('authentication', ['authentication'])
 @Controller('lodgings')
 export class LodgingsController {
@@ -61,7 +63,7 @@ export class LodgingsController {
      * @returns the entity found.
      */
     @Get(':id')
-    findOne(@Param('id') id: string): Promise<Lodging> {
+    findOne(@Param() { id }: NumIdRequestParam): Promise<Lodging> {
         return this.lodgingsService.findOne(+id);
     }
 
@@ -75,7 +77,7 @@ export class LodgingsController {
      */
     @Put(':id')
     fullUpdate(
-        @Param('id') id: string,
+        @Param() { id }: NumIdRequestParam,
         @Body() createLodgingDto: CreateLodgingDto,
     ): Promise<Lodging> {
         return this.lodgingsService.update(+id, createLodgingDto);
@@ -91,7 +93,7 @@ export class LodgingsController {
      */
     @Patch(':id')
     update(
-        @Param('id') id: string,
+        @Param() { id }: NumIdRequestParam,
         @Body() updateLodgingDto: UpdateLodgingDto,
     ): Promise<Lodging> {
         if (
@@ -118,7 +120,7 @@ export class LodgingsController {
      * @returns the deleted entity.
      */
     @Delete(':id')
-    remove(@Param('id') id: string): Promise<Lodging> {
+    remove(@Param() { id }: NumIdRequestParam): Promise<Lodging> {
         return this.lodgingsService.remove(+id);
     }
 }

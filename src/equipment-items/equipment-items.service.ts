@@ -32,16 +32,22 @@ export class EquipmentItemsService {
      * @param isNew Flag that determines whether the entity is new or not.
      * @returns true if the equipment item is unique, otherwise false.
      */
-    async isUnique(equipmentItem: EquipmentItem, isNew: boolean): Promise<boolean> {
+    async isUnique(
+        equipmentItem: EquipmentItem,
+        isNew: boolean,
+    ): Promise<boolean> {
         const repeatedEquipmentItem: EquipmentItem | null =
             await this.em.findOne(EquipmentItem, {
                 gear_item: equipmentItem.gear_item,
                 equipment_set: equipmentItem.equipment_set,
             });
         if (isNew) {
-            return !repeatedEquipmentItem
+            return !repeatedEquipmentItem;
         } else {
-            return !repeatedEquipmentItem || equipmentItem.id === repeatedEquipmentItem.id
+            return (
+                !repeatedEquipmentItem ||
+                equipmentItem.id === repeatedEquipmentItem.id
+            );
         }
     }
 
@@ -69,7 +75,10 @@ export class EquipmentItemsService {
         equipmentItem.gear_item = gearItem;
         equipmentItem.equipment_set = equipmentSet;
 
-        const entityIsUnique: boolean = await this.isUnique(equipmentItem, true);
+        const entityIsUnique: boolean = await this.isUnique(
+            equipmentItem,
+            true,
+        );
         if (entityIsUnique) {
             await this.em.persistAndFlush(equipmentItem);
         } else {
@@ -134,7 +143,10 @@ export class EquipmentItemsService {
                     updateEquipmentItemDto.equipment_set_id,
                 );
         }
-        const entityIsUnique: boolean = await this.isUnique(equipmentItem, false);
+        const entityIsUnique: boolean = await this.isUnique(
+            equipmentItem,
+            false,
+        );
         if (entityIsUnique) {
             await this.em.persistAndFlush(equipmentItem);
         } else {

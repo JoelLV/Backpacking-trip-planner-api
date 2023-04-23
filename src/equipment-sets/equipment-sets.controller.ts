@@ -13,8 +13,10 @@ import { EquipmentSetsService } from './equipment-sets.service';
 import { CreateEquipmentSetDto } from './dto/create-equipment-set.dto';
 import { UpdateEquipmentSetDto } from './dto/update-equipment-set.dto';
 import { EquipmentSet } from './model/equipment-set.model';
-import { ApiSecurity } from '@nestjs/swagger';
+import { ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { NumIdRequestParam } from 'src/validators/num-id-request-param.validator';
 
+@ApiTags('Equipment Sets')
 @ApiSecurity('authentication', ['authentication'])
 @Controller('equipment-sets')
 export class EquipmentSetsController {
@@ -60,7 +62,7 @@ export class EquipmentSetsController {
      * @returns the entity found.
      */
     @Get(':id')
-    findOne(@Param('id') id: string): Promise<EquipmentSet> {
+    findOne(@Param() { id }: NumIdRequestParam): Promise<EquipmentSet> {
         return this.equipmentSetsService.findOne(+id);
     }
 
@@ -74,7 +76,7 @@ export class EquipmentSetsController {
      */
     @Put(':id')
     fullUpdate(
-        @Param('id') id: string,
+        @Param() { id }: NumIdRequestParam,
         @Body() createEquipmentSetDto: CreateEquipmentSetDto,
     ): Promise<EquipmentSet> {
         return this.equipmentSetsService.update(+id, createEquipmentSetDto);
@@ -90,7 +92,7 @@ export class EquipmentSetsController {
      */
     @Patch(':id')
     update(
-        @Param('id') id: string,
+        @Param() { id }: NumIdRequestParam,
         @Body() updateEquipmentSetDto: UpdateEquipmentSetDto,
     ): Promise<EquipmentSet> {
         if (
@@ -112,7 +114,7 @@ export class EquipmentSetsController {
      * @returns the deleted entity.
      */
     @Delete(':id')
-    remove(@Param('id') id: string): Promise<EquipmentSet> {
+    remove(@Param() { id }: NumIdRequestParam): Promise<EquipmentSet> {
         return this.equipmentSetsService.remove(+id);
     }
 }

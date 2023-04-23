@@ -13,8 +13,10 @@ import { EquipmentItemsService } from './equipment-items.service';
 import { CreateEquipmentItemDto } from './dto/create-equipment-item.dto';
 import { UpdateEquipmentItemDto } from './dto/update-equipment-item.dto';
 import { EquipmentItem } from './model/equipment-item.model';
-import { ApiSecurity } from '@nestjs/swagger';
+import { ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { NumIdRequestParam } from 'src/validators/num-id-request-param.validator';
 
+@ApiTags('Equipment Items')
 @ApiSecurity('authentication', ['authentication'])
 @Controller('equipment-items')
 export class EquipmentItemsController {
@@ -71,7 +73,7 @@ export class EquipmentItemsController {
      * @returns the entity found.
      */
     @Get(':id')
-    async findOne(@Param('id') id: string): Promise<EquipmentItem> {
+    async findOne(@Param() { id }: NumIdRequestParam): Promise<EquipmentItem> {
         const entity = await this.equipmentItemsService.findOne(+id);
         return {
             id: entity.id,
@@ -91,7 +93,7 @@ export class EquipmentItemsController {
      */
     @Put(':id')
     async fullUpdate(
-        @Param('id') id: string,
+        @Param() { id }: NumIdRequestParam,
         @Body() createEquipmentItemDto: CreateEquipmentItemDto,
     ): Promise<EquipmentItem> {
         const entity = await this.equipmentItemsService.update(
@@ -116,7 +118,7 @@ export class EquipmentItemsController {
      */
     @Patch(':id')
     async update(
-        @Param('id') id: string,
+        @Param() { id }: NumIdRequestParam,
         @Body() updateEquipmentItemDto: UpdateEquipmentItemDto,
     ): Promise<EquipmentItem> {
         if (
@@ -149,7 +151,7 @@ export class EquipmentItemsController {
      * @returns the deleted entity.
      */
     @Delete(':id')
-    async remove(@Param('id') id: string): Promise<EquipmentItem> {
+    async remove(@Param() { id }: NumIdRequestParam): Promise<EquipmentItem> {
         const entity = await this.equipmentItemsService.remove(+id);
         return {
             id: entity.id,

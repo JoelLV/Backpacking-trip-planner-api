@@ -13,8 +13,10 @@ import { GearItemsService } from './gear-items.service';
 import { CreateGearItemDto } from './dto/create-gear-item.dto';
 import { UpdateGearItemDto } from './dto/update-gear-item.dto';
 import { GearItem } from './model/gear-item.model';
-import { ApiSecurity } from '@nestjs/swagger';
+import { ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { NumIdRequestParam } from 'src/validators/num-id-request-param.validator';
 
+@ApiTags('Gear Items')
 @ApiSecurity('authentication', ['authentication'])
 @Controller('gear-items')
 export class GearItemsController {
@@ -58,7 +60,7 @@ export class GearItemsController {
      * @returns the entity found.
      */
     @Get(':id')
-    findOne(@Param('id') id: string): Promise<GearItem> {
+    findOne(@Param() { id }: NumIdRequestParam): Promise<GearItem> {
         return this.gearItemsService.findOne(+id);
     }
 
@@ -72,7 +74,7 @@ export class GearItemsController {
      */
     @Put(':id')
     fullUpdate(
-        @Param('id') id: string,
+        @Param() { id }: NumIdRequestParam,
         @Body() createGearItemDto: CreateGearItemDto,
     ): Promise<GearItem> {
         return this.gearItemsService.update(+id, createGearItemDto);
@@ -88,7 +90,7 @@ export class GearItemsController {
      */
     @Patch(':id')
     update(
-        @Param('id') id: string,
+        @Param() { id }: NumIdRequestParam,
         @Body() updateGearItemDto: UpdateGearItemDto,
     ): Promise<GearItem> {
         if (
@@ -110,7 +112,7 @@ export class GearItemsController {
      * @returns the deleted entity.
      */
     @Delete(':id')
-    remove(@Param('id') id: string): Promise<GearItem> {
+    remove(@Param() { id }: NumIdRequestParam): Promise<GearItem> {
         return this.gearItemsService.remove(+id);
     }
 }

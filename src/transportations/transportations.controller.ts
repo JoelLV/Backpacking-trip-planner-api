@@ -13,8 +13,9 @@ import { TransportationsService } from './transportations.service';
 import { CreateTransportationDto } from './dto/create-transportation.dto';
 import { UpdateTransportationDto } from './dto/update-transportation.dto';
 import { Transportation } from './model/transportation.model';
-import { ApiSecurity } from '@nestjs/swagger';
-
+import { ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { NumIdRequestParam } from 'src/validators/num-id-request-param.validator';
+@ApiTags('Transportations')
 @ApiSecurity('authentication', ['authentication'])
 @Controller('transportations')
 export class TransportationsController {
@@ -64,7 +65,7 @@ export class TransportationsController {
      * @returns the entity found.
      */
     @Get(':id')
-    findOne(@Param('id') id: string): Promise<Transportation> {
+    findOne(@Param() { id }: NumIdRequestParam): Promise<Transportation> {
         return this.transportationsService.findOne(+id);
     }
 
@@ -78,7 +79,7 @@ export class TransportationsController {
      */
     @Put(':id')
     fullUpdate(
-        @Param('id') id: string,
+        @Param() { id }: NumIdRequestParam,
         @Body() createTransporationDto: CreateTransportationDto,
     ): Promise<Transportation> {
         return this.transportationsService.update(+id, createTransporationDto);
@@ -94,7 +95,7 @@ export class TransportationsController {
      */
     @Patch(':id')
     update(
-        @Param('id') id: string,
+        @Param() { id }: NumIdRequestParam,
         @Body() updateTransportationDto: UpdateTransportationDto,
     ): Promise<Transportation> {
         if (
@@ -118,7 +119,7 @@ export class TransportationsController {
      * @returns the deleted entity.
      */
     @Delete(':id')
-    remove(@Param('id') id: string): Promise<Transportation> {
+    remove(@Param() { id }: NumIdRequestParam): Promise<Transportation> {
         return this.transportationsService.remove(+id);
     }
 }
