@@ -87,7 +87,7 @@ export class TransportationsService {
      */
     async remove(id: number): Promise<Loaded<Transportation>> {
         const transportation: Loaded<Transportation> = await this.findOne(id);
-        this.em.removeAndFlush(transportation);
+        await this.em.removeAndFlush(transportation);
 
         return transportation;
     }

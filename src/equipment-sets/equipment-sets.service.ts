@@ -89,7 +89,7 @@ export class EquipmentSetsService {
      */
     async remove(id: number): Promise<Loaded<EquipmentSet>> {
         const equipmentSet: Loaded<EquipmentSet> = await this.findOne(id);
-        this.em.removeAndFlush(equipmentSet);
+        await this.em.removeAndFlush(equipmentSet);
 
         return equipmentSet;
     }

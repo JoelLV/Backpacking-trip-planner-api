@@ -84,7 +84,7 @@ export class TrailsService {
      */
     async remove(id: number): Promise<Loaded<Trail>> {
         const trail: Loaded<Trail> = await this.findOne(id);
-        this.em.removeAndFlush(trail);
+        await this.em.removeAndFlush(trail);
 
         return trail;
     }

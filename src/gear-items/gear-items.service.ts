@@ -85,7 +85,7 @@ export class GearItemsService {
      */
     async remove(id: number): Promise<Loaded<GearItem>> {
         const gearItem: Loaded<GearItem> = await this.findOne(id);
-        this.em.removeAndFlush(gearItem);
+        await this.em.removeAndFlush(gearItem);
 
         return gearItem;
     }
