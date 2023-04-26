@@ -13,7 +13,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './model/user.model';
-import { ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiNotFoundResponse, ApiParam, ApiSecurity, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { StringIdRequestParam } from 'src/validators/string-id-request-param.validator';
 
 @ApiTags('Users')
@@ -28,6 +28,8 @@ export class UsersController {
      * @param createUserDto dto used to fetch data for entity.
      * @returns a user entity object.
      */
+    @ApiBadRequestResponse({ description: 'Triggered when data validation of request parameters or body fail.' })
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
     @ApiSecurity('authentication', ['authentication'])
     @Post()
     async create(@Body() createUserDto: CreateUserDto): Promise<User> {
@@ -47,6 +49,7 @@ export class UsersController {
      * @param createUserDto dto used to create user.
      * @returns the user entity created.
      */
+    @ApiBadRequestResponse({ description: 'Triggered when data validation of request parameters or body fail.' })
     @Post('/admin')
     async createAdmin(@Body() createUserDto: CreateUserDto): Promise<User> {
         const entity = await this.usersService.create(createUserDto);
@@ -64,6 +67,7 @@ export class UsersController {
      * @returns an array of user entities.
      */
     @ApiSecurity('authentication', ['authentication'])
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
     @Get()
     findAll(): Promise<User[]> {
         return this.usersService.findAll();
@@ -77,6 +81,10 @@ export class UsersController {
      * @returns the entity found.
      */
     @ApiSecurity('authentication', ['authentication'])
+    @ApiNotFoundResponse({ description: 'Triggered when entity specified is not found.' })
+    @ApiBadRequestResponse({ description: 'Triggered when data validation of request parameters or body fail.' })
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
+    @ApiParam({ name: 'id' })
     @Get(':id')
     findOne(@Param() { id }: StringIdRequestParam): Promise<User> {
         return this.usersService.findOne(id);
@@ -91,6 +99,10 @@ export class UsersController {
      * @returns the modified entity.
      */
     @ApiSecurity('authentication', ['authentication'])
+    @ApiNotFoundResponse({ description: 'Triggered when entity specified is not found.' })
+    @ApiBadRequestResponse({ description: 'Triggered when data validation of request parameters or body fail.' })
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
+    @ApiParam({ name: 'id' })
     @Put(':id')
     fullUpdate(
         @Param() { id }: StringIdRequestParam,
@@ -108,6 +120,10 @@ export class UsersController {
      * @returns the modified entity.
      */
     @ApiSecurity('authentication', ['authentication'])
+    @ApiNotFoundResponse({ description: 'Triggered when entity specified is not found.' })
+    @ApiBadRequestResponse({ description: 'Triggered when data validation of request parameters or body fail.' })
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
+    @ApiParam({ name: 'id' })
     @Patch(':id')
     update(
         @Param() { id }: StringIdRequestParam,
@@ -129,6 +145,10 @@ export class UsersController {
      * @returns the deleted entity.
      */
     @ApiSecurity('authentication', ['authentication'])
+    @ApiNotFoundResponse({ description: 'Triggered when entity specified is not found.' })
+    @ApiBadRequestResponse({ description: 'Triggered when data validation of request parameters or body fail.' })
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
+    @ApiParam({ name: 'id' })
     @Delete(':id')
     remove(@Param() { id }: StringIdRequestParam): Promise<User> {
         return this.usersService.remove(id);

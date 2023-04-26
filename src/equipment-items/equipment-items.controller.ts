@@ -13,7 +13,7 @@ import { EquipmentItemsService } from './equipment-items.service';
 import { CreateEquipmentItemDto } from './dto/create-equipment-item.dto';
 import { UpdateEquipmentItemDto } from './dto/update-equipment-item.dto';
 import { EquipmentItem } from './model/equipment-item.model';
-import { ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiNotFoundResponse, ApiOperation, ApiParam, ApiSecurity, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { NumIdRequestParam } from 'src/validators/num-id-request-param.validator';
 
 @ApiTags('Equipment Items')
@@ -31,6 +31,9 @@ export class EquipmentItemsController {
      * @param createEquipmentItemDto dto used to fetch data for entity.
      * @returns a equipment entity entity object.
      */
+    @ApiNotFoundResponse({ description: 'Triggered when foreign keys of other entities do not exist.' })
+    @ApiBadRequestResponse({ description: 'Triggered when data validation of request parameters or body fail.' })
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
     @Post()
     async create(
         @Body() createEquipmentItemDto: CreateEquipmentItemDto,
@@ -52,6 +55,7 @@ export class EquipmentItemsController {
      *
      * @returns an array of equipment item entities.
      */
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
     @Get()
     async findAll(): Promise<EquipmentItem[]> {
         const entities = await this.equipmentItemsService.findAll();
@@ -72,6 +76,10 @@ export class EquipmentItemsController {
      * @param id id of equipment item to find.
      * @returns the entity found.
      */
+    @ApiNotFoundResponse({ description: 'Triggered when entity specified is not found.' })
+    @ApiBadRequestResponse({ description: 'Triggered when data validation of request parameters or body fail.' })
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
+    @ApiParam({ name: 'id' })
     @Get(':id')
     async findOne(@Param() { id }: NumIdRequestParam): Promise<EquipmentItem> {
         const entity = await this.equipmentItemsService.findOne(+id);
@@ -91,6 +99,10 @@ export class EquipmentItemsController {
      * @param createEquipmentItemDto dto of entity to modify.
      * @returns the modified entity.
      */
+    @ApiNotFoundResponse({ description: 'Triggered when entity specified is not found. Also applies to foreign keys of other entities.' })
+    @ApiBadRequestResponse({ description: 'Triggered when data validation of request parameters or body fail.' })
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
+    @ApiParam({ name: 'id' })
     @Put(':id')
     async fullUpdate(
         @Param() { id }: NumIdRequestParam,
@@ -116,6 +128,10 @@ export class EquipmentItemsController {
      * @param updateEquipmentItemDto dto of entity to modify.
      * @returns the modified entity.
      */
+    @ApiNotFoundResponse({ description: 'Triggered when entity specified is not found. Also applies to foreign keys of other entities.' })
+    @ApiBadRequestResponse({ description: 'Triggered when data validation of request parameters or body fail.' })
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
+    @ApiParam({ name: 'id' })
     @Patch(':id')
     async update(
         @Param() { id }: NumIdRequestParam,
@@ -150,6 +166,10 @@ export class EquipmentItemsController {
      * @param id id of entity to delete.
      * @returns the deleted entity.
      */
+    @ApiNotFoundResponse({ description: 'Triggered when entity specified is not found. Also applies to foreign keys of other entities.' })
+    @ApiBadRequestResponse({ description: 'Triggered when data validation of request parameters or body fail.' })
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
+    @ApiParam({ name: 'id' })
     @Delete(':id')
     async remove(@Param() { id }: NumIdRequestParam): Promise<EquipmentItem> {
         const entity = await this.equipmentItemsService.remove(+id);

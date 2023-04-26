@@ -13,7 +13,7 @@ import { TripsService } from './trips.service';
 import { CreateTripDto } from './dto/create-trip.dto';
 import { UpdateTripDto } from './dto/update-trip.dto';
 import { Trip } from './model/trip.model';
-import { ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiNotFoundResponse, ApiParam, ApiSecurity, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { NumIdRequestParam } from 'src/validators/num-id-request-param.validator';
 
 @ApiTags('Trips')
@@ -29,6 +29,9 @@ export class TripsController {
      * @param createTripDto dto used to fetch data for entity.
      * @returns a trip entity entity object.
      */
+    @ApiNotFoundResponse({ description: 'Triggered when foreign keys of other entities do not exist.' })
+    @ApiBadRequestResponse({ description: 'Triggered when data validation of request parameters or body fail.' })
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
     @Post()
     async create(@Body() createTripDto: CreateTripDto): Promise<Trip> {
         const entity = await this.tripsService.create(createTripDto);
@@ -49,6 +52,7 @@ export class TripsController {
      *
      * @returns an array of trip entities.
      */
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
     @Get()
     async findAll(): Promise<Trip[]> {
         const entities = await this.tripsService.findAll();
@@ -72,6 +76,10 @@ export class TripsController {
      * @param id id of trip to find.
      * @returns the entity found.
      */
+    @ApiNotFoundResponse({ description: 'Triggered when entity specified is not found.' })
+    @ApiBadRequestResponse({ description: 'Triggered when data validation of request parameters or body fail.' })
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
+    @ApiParam({ name: 'id' })
     @Get(':id')
     async findOne(@Param() { id }: NumIdRequestParam): Promise<Trip> {
         const entity = await this.tripsService.findOne(+id);
@@ -94,6 +102,10 @@ export class TripsController {
      * @param createTripDto dto of entity to modify.
      * @returns the modified entity.
      */
+    @ApiNotFoundResponse({ description: 'Triggered when entity specified is not found. Also applies to foreign keys of other entities.' })
+    @ApiBadRequestResponse({ description: 'Triggered when data validation of request parameters or body fail.' })
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
+    @ApiParam({ name: 'id' })
     @Put(':id')
     async fullUpdate(
         @Param() { id }: NumIdRequestParam,
@@ -119,6 +131,10 @@ export class TripsController {
      * @param updateTripDto dto of entity to modify.
      * @returns the modified entity.
      */
+    @ApiNotFoundResponse({ description: 'Triggered when entity specified is not found. Also applies to foreign keys of other entities.' })
+    @ApiBadRequestResponse({ description: 'Triggered when data validation of request parameters or body fail.' })
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
+    @ApiParam({ name: 'id' })
     @Patch(':id')
     async update(
         @Param() { id }: NumIdRequestParam,
@@ -155,6 +171,10 @@ export class TripsController {
      * @param id id of entity to delete.
      * @returns the deleted entity.
      */
+    @ApiNotFoundResponse({ description: 'Triggered when entity specified is not found. Also applies to foreign keys of other entities.' })
+    @ApiBadRequestResponse({ description: 'Triggered when data validation of request parameters or body fail.' })
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
+    @ApiParam({ name: 'id' })
     @Delete(':id')
     async remove(@Param() { id }: NumIdRequestParam): Promise<Trip> {
         const entity = await this.tripsService.remove(+id);

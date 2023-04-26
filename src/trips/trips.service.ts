@@ -58,7 +58,7 @@ export class TripsService {
         trip.trail = trail;
         trip.transporation = transportation;
         trip.user = user;
-        trip.planned_date = createTripDto.planned_date;
+        trip.planned_date = new Date(new Date(createTripDto.planned_date).toISOString());   // Handles an edge case where dates in a specific format causes server to crash.
 
         await this.em.persistAndFlush(trip);
         return trip;
@@ -102,7 +102,10 @@ export class TripsService {
     async update(id: number, tripDto: UpdateTripDto | CreateTripDto) {
         const trip: Loaded<Trip> = await this.findOne(id);
 
-        trip.planned_date = tripDto.planned_date ?? trip.planned_date;
+        if (tripDto.planned_date !== undefined) {
+            // Handles an edge case where dates in a specific format causes server to crash.
+            trip.planned_date = new Date(new Date(tripDto.planned_date).toISOString()) ?? trip.planned_date;
+        }
         if (tripDto.equipment_set_id !== undefined) {
             trip.equipment_set = await this.equipmentSetsService.findOne(
                 tripDto.equipment_set_id,

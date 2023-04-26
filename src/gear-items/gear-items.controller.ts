@@ -13,7 +13,7 @@ import { GearItemsService } from './gear-items.service';
 import { CreateGearItemDto } from './dto/create-gear-item.dto';
 import { UpdateGearItemDto } from './dto/update-gear-item.dto';
 import { GearItem } from './model/gear-item.model';
-import { ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiNotFoundResponse, ApiParam, ApiSecurity, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { NumIdRequestParam } from 'src/validators/num-id-request-param.validator';
 
 @ApiTags('Gear Items')
@@ -29,6 +29,8 @@ export class GearItemsController {
      * @param createGearItemDto dto used to fetch data for entity.
      * @returns a gear item entity object.
      */
+    @ApiBadRequestResponse({ description: 'Triggered when data validation of request parameters or body fail.' })
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
     @Post()
     async create(
         @Body() createGearItemDto: CreateGearItemDto,
@@ -47,6 +49,7 @@ export class GearItemsController {
      *
      * @returns an array of gear item entities.
      */
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
     @Get()
     async findAll(): Promise<GearItem[]> {
         return this.gearItemsService.findAll();
@@ -59,6 +62,10 @@ export class GearItemsController {
      * @param id id of gear item to find.
      * @returns the entity found.
      */
+    @ApiNotFoundResponse({ description: 'Triggered when entity specified is not found.' })
+    @ApiBadRequestResponse({ description: 'Triggered when data validation of request parameters or body fail.' })
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
+    @ApiParam({ name: 'id' })
     @Get(':id')
     findOne(@Param() { id }: NumIdRequestParam): Promise<GearItem> {
         return this.gearItemsService.findOne(+id);
@@ -72,6 +79,10 @@ export class GearItemsController {
      * @param createGearItemDto dto of entity to modify.
      * @returns the modified entity.
      */
+    @ApiNotFoundResponse({ description: 'Triggered when entity specified is not found.' })
+    @ApiBadRequestResponse({ description: 'Triggered when data validation of request parameters or body fail.' })
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
+    @ApiParam({ name: 'id' })
     @Put(':id')
     fullUpdate(
         @Param() { id }: NumIdRequestParam,
@@ -88,6 +99,10 @@ export class GearItemsController {
      * @param updateGearItemDto dto of entity to modify.
      * @returns the modified entity.
      */
+    @ApiNotFoundResponse({ description: 'Triggered when entity specified is not found.' })
+    @ApiBadRequestResponse({ description: 'Triggered when data validation of request parameters or body fail.' })
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
+    @ApiParam({ name: 'id' })
     @Patch(':id')
     update(
         @Param() { id }: NumIdRequestParam,
@@ -111,6 +126,10 @@ export class GearItemsController {
      * @param id id of entity to delete.
      * @returns the deleted entity.
      */
+    @ApiNotFoundResponse({ description: 'Triggered when entity specified is not found.' })
+    @ApiBadRequestResponse({ description: 'Triggered when data validation of request parameters or body fail.' })
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
+    @ApiParam({ name: 'id' })
     @Delete(':id')
     remove(@Param() { id }: NumIdRequestParam): Promise<GearItem> {
         return this.gearItemsService.remove(+id);

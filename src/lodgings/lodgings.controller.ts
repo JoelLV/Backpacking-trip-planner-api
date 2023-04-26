@@ -13,7 +13,7 @@ import { LodgingsService } from './lodgings.service';
 import { CreateLodgingDto } from './dto/create-lodging.dto';
 import { UpdateLodgingDto } from './dto/update-lodging.dto';
 import { Lodging } from './model/lodging.model';
-import { ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiNotFoundResponse, ApiParam, ApiSecurity, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { NumIdRequestParam } from 'src/validators/num-id-request-param.validator';
 
 @ApiTags('Lodgings')
@@ -29,6 +29,8 @@ export class LodgingsController {
      * @param createLodgingDto dto used to fetch data for entity.
      * @returns a lodging entity object.
      */
+    @ApiBadRequestResponse({ description: 'Triggered when data validation of request parameters or body fail.' })
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
     @Post()
     async create(@Body() createLodgingDto: CreateLodgingDto): Promise<Lodging> {
         const entity = await this.lodgingsService.create(createLodgingDto);
@@ -50,6 +52,7 @@ export class LodgingsController {
      *
      * @returns an array of lodging entities.
      */
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
     @Get()
     findAll(): Promise<Lodging[]> {
         return this.lodgingsService.findAll();
@@ -62,6 +65,10 @@ export class LodgingsController {
      * @param id id of lodging to find.
      * @returns the entity found.
      */
+    @ApiNotFoundResponse({ description: 'Triggered when entity specified is not found.' })
+    @ApiBadRequestResponse({ description: 'Triggered when data validation of request parameters or body fail.' })
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
+    @ApiParam({ name: 'id' })
     @Get(':id')
     findOne(@Param() { id }: NumIdRequestParam): Promise<Lodging> {
         return this.lodgingsService.findOne(+id);
@@ -75,6 +82,10 @@ export class LodgingsController {
      * @param createLodgingDto dto of entity to modify.
      * @returns the modified entity.
      */
+    @ApiNotFoundResponse({ description: 'Triggered when entity specified is not found.' })
+    @ApiBadRequestResponse({ description: 'Triggered when data validation of request parameters or body fail.' })
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
+    @ApiParam({ name: 'id' })
     @Put(':id')
     fullUpdate(
         @Param() { id }: NumIdRequestParam,
@@ -91,6 +102,10 @@ export class LodgingsController {
      * @param updateLodgingDto dto of entity to modify.
      * @returns the modified entity.
      */
+    @ApiNotFoundResponse({ description: 'Triggered when entity specified is not found.' })
+    @ApiBadRequestResponse({ description: 'Triggered when data validation of request parameters or body fail.' })
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
+    @ApiParam({ name: 'id' })
     @Patch(':id')
     update(
         @Param() { id }: NumIdRequestParam,
@@ -119,6 +134,10 @@ export class LodgingsController {
      * @param id id of entity to delete.
      * @returns the deleted entity.
      */
+    @ApiNotFoundResponse({ description: 'Triggered when entity specified is not found.' })
+    @ApiBadRequestResponse({ description: 'Triggered when data validation of request parameters or body fail.' })
+    @ApiUnauthorizedResponse({ description: 'Triggered when the "authentication" key is not provided on headers or the API key is not valid.' })
+    @ApiParam({ name: 'id' })
     @Delete(':id')
     remove(@Param() { id }: NumIdRequestParam): Promise<Lodging> {
         return this.lodgingsService.remove(+id);
